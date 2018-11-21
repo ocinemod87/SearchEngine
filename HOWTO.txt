@@ -1,0 +1,80 @@
+
+Search Engine - Howto
+======================================================================
+
+The Search Engine prototype is managed and built with Gradle. What
+follows are instructions on how to use Gradle to build and run the
+search engine, how to import the project to IntelliJ, and more.
+
+Files and directories:
+
+  src          Search Engine server
+  static       Search Engine client
+  data         Search Engine database files
+  gradle       Gradle build tool (needed to e.g. compile)
+  [build]      Gradle output (class files, documentation, ...)
+  build.gradle Gradle configuration file
+  gradlew.bat  Gradle script (Windows)
+  gradlew      Gradle script (Linux/Mac)
+  HOWTO.txt    This file
+  README.md    Your project description, in "Markdown" syntax
+
+Builds for this project are managed by Gradle - a build automation
+tool. What follows are commands that you are likely to need. They
+assume that you are in a terminal window, and have navigated to the
+project directory (and can e.g. see the above-listed files).
+
+Linux users: Add "./" in front of "gradlew" in the following commands.
+
+Windows users: Set JAVA_HOME environment variable (you installed JDK):
+  https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html
+
+
+All You Need
+----------------------------------------------------------------------
+
+List available Gradle tasks:
+
+  gradlew tasks
+
+We have configured Gradle such that all the tasks you need, are, well,
+under the heading "All You Need". (Save for the Benchmark; see below)
+
+The "runWeb" and "runCLI" commands expect a path to the database file,
+either as an argument the form "--args data/enwiki-small.txt", or
+stored in the file config.properties. (we recommend the config file).
+
+Run Search Engine from command line. Here, data/enwiki-small.txt is a
+supplied database file. In Windows, the path might be different (and
+you might need to provide an absolute path).
+
+The benchmark could not be placed into this list for technical
+reasons. To run the benchmark, run the "jmh" task under heading "Jmh".
+
+  gradlew jmh
+
+In case you experience errors after trying out the benchmark: Might be
+because Gradle + JMH left a Gradle process in the background that has
+a lock on a file. Kill all Gradle processes:
+
+  gradlew --stop
+
+
+IntelliJ Integration
+----------------------------------------------------------------------
+
+Generate IDEA IntelliJ project files:
+
+  gradlew idea
+
+Importing the project to IntelliJ:
+
+  Import project from Gradle model (choose "build.gradle"):
+  https://www.jetbrains.com/help/idea/gradle.html#gradle_import
+
+  Make IntelliJ's "build" follow Gradle convention:
+  https://mrhaki.blogspot.com/2016/11/gradle-goodness-delegate-build-and-run.html
+
+We recommend using the Gradle tasks to build and run your project. You
+can get them as a menu on the right. Open "All You Need", and you'll
+have a list of all the task you will need.

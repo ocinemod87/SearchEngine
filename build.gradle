@@ -1,0 +1,105 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE')
+  }
+}
+
+plugins {
+  id 'me.champeau.gradle.jmh' version '0.4.7'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'application'
+
+mainClassName = 'searchengine.WebApplication'
+//mainClassName = 'searchengine.CLIApplication'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompileOnly('junit:junit:4.12')
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.1.0')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.1.0','org.junit.vintage:junit-vintage-engine:5.1.0')
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = '1G'
+}
+
+jmh { 
+    jvmArgs = ['-Djmh.separateClasspathJAR=true']
+}
+
+run {
+    standardInput = System.in
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
+task runCLI(type: JavaExec) {
+    group 'All You Need'
+    description 'Runs this project as a command-line application (args w/ --args).'
+    standardInput = System.in
+    classpath sourceSets.main.runtimeClasspath
+    main = "searchengine.CLIApplication"
+}
+
+task runWeb(type: JavaExec) {
+    group 'All You Need'
+    description 'Runs this project as a Spring Boot application (args w/ --args).'
+    standardInput = System.in
+    classpath sourceSets.main.runtimeClasspath
+    main = "searchengine.WebApplication"
+}
+
+jmh {
+    group 'All You Need'
+    description 'Runs the JMH benchmark.'
+}
+
+task runTest(dependsOn: test) {
+    group 'All You Need'
+    description 'Runs the JUnit tests.'
+}
+
+task buildMain(dependsOn: classes) {
+    group 'All You Need'
+    description 'Compiles the Java source files for the search engine .'
+}
+
+task cleanup(dependsOn: clean) {
+    group 'All You Need'
+    description 'Deletes the build directory.'
+}
+
+task buildDoc(dependsOn: javadoc) {
+    group 'All You Need'
+    description 'Generates Javadoc API documentation for the main source code.'
+}
+
+task buildJmh(dependsOn: jmhClasses) {
+    group 'All You Need'
+    description 'Compiles the JMH benchmark files.'
+}
+
+task buildTest(dependsOn: testClasses) {
+    group 'All You Need'
+    description 'Compiles the JUnit tests.'
+}
+

@@ -1,0 +1,20 @@
+#urllist {
+    color: #969696;
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin: 10px;
+    border: solid 1px #dcdcdc;
+    border-radius: 4px;
+    min-width: 200px;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="text"].focus {
+    border: solid 1px #707070;
+    box-shadow: 0 0 5px 1px #969696;
+}
