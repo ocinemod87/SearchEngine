@@ -16,6 +16,8 @@
 .idea/**/misc.xml
 .idea/**/modules.xml
 .idea/**/vcs.xml
+.idea/modules
+.idea/**/compiler.xml
 ip18groupM.iml
 
 
