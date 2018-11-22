@@ -63,7 +63,7 @@ public class FileHelper {
                 if (line.startsWith("*PAGE:")) {
                     // new website entry starts, so create previous website from data gathered
                     // (if data is correct [Assignment 2])
-                    if (url != null) {
+                    if (url != null && title != null && listOfWords != null) {
                         sites.add(new Website(url, title, listOfWords));
                     }
 
@@ -87,7 +87,7 @@ public class FileHelper {
                 }
             }
             // When we have read the whole file, we have to create the very last website manually.
-            if (url != null) {
+            if (url != null && title != null && listOfWords != null) {
                 sites.add(new Website(url, title, listOfWords));
             }
         } catch (FileNotFoundException e) {
