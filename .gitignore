@@ -12,6 +12,13 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/codeStyleConfig.xml
+.idea/**/misc.xml
+.idea/**/modules.xml
+.idea/**/vcs.xml
+ip18groupM.iml
+
+
 
 # Generated files
 .idea/**/contentModel.xml
