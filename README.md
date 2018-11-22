@@ -9,6 +9,7 @@ To build and run the project, please see the HOWTO.txt file.
 
 ## Authors
 
-* **Alice Liddell**
-* **Bob Ross**
-* ...
+* *Flemming Westberg Sørensen*
+* *Mikkel Buch Smedemand*
+* *André Mortensen Kobæk*
+* *Domenico Villani*
