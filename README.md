@@ -1,6 +1,6 @@
 # Project: Search Engine
 
-This repository contains the source code for Group Z's implementation
+This repository contains the source code for Group M's implementation
 of the Search Engine project in the Introductory Programming course.
 
 ## Getting Started
