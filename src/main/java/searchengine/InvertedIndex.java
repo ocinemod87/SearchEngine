@@ -1,26 +1,29 @@
 package searchengine;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-abstract public class InvertedIndex implements Index {
+public abstract class InvertedIndex implements Index {
 
-    protected Map<String, List<Website>> map;
+    protected Map<String, Collection<Website>> map;
     /**
      *Takes a list of websites and creates a map. The keys are the words contained in these websites,
      * the value is a list of all the websites containing that key word.
      * @param sites The list of websites that should be indexed
      */
     @Override
-    public void build (List<Website> sites){
+    public void build (Collection<Website> sites){
 
-        for(Website site: sites){
+        for(Website site : sites){
             for(String word: site.getWords()){
 
                 //check if the map contains already an entry of this type
                 if(map.containsKey(word)){
                     //if yes takes the value from this entry and add the website to it
-                    List<Website> websites = map.get(word);
+                    Collection<Website> websites = map.get(word);
                     websites.add(site);
                     map.put(word, websites);
                 }else{
@@ -39,7 +42,22 @@ abstract public class InvertedIndex implements Index {
      * @return the List of website that contain the query word
      */
     @Override
-    public List<Website> lookup(String query){
-        return map.get(query);
+    public Collection<Website> lookup(String query){
+    	
+//    	Pattern oneWord = Pattern.compile("(\\w)");
+//    	Pattern twoWords = Pattern.compile("(\\w)\\s(\\w)");  // two words separated by a single whitespace
+//		Matcher queryMatcher = twoWords.matcher(query);
+//		
+//		int numberOfWords = queryMatcher.groupCount();
+//		Set<String> setOfQueryWords = new HashSet<>();
+//		for (int n=1; n<= numberOfWords; n++) {
+//			setOfQueryWords.add(queryMatcher.group(n));	
+//			
+//			map.get(queryMatcher.group(n));
+//		}
+//		
+//		List<Website> list1 = 
+		
+	    return map.get(query);
     }
 }
