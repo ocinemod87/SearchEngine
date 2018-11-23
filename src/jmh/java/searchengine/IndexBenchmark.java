@@ -66,10 +66,12 @@ public class IndexBenchmark {
     public void measureAvgTime(BenchmarkState state) throws InterruptedException {
       // STUDENTS, make your changes here
       // REMEMBER to vary the size of the data file (see above)
+      //Initialize list of search words
       String[] searchWords = {"denmark","sweden","iceland","germany","england","norway",
           "france","belgium","poland","italy","spain","greece","austria","latvia","estonia",
           "switzerland","ireland","netherlands","scotland","wales"};
-      for (String searchWord:searchWords) {
+      //Call the search method of searchEngine for every search word
+      for (String searchWord : searchWords) {
         state.searchengine.search(searchWord);
       }
     }
