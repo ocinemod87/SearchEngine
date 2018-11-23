@@ -64,9 +64,16 @@ public class IndexBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public void measureAvgTime(BenchmarkState state) throws InterruptedException {
-        // STUDENTS, make your changes here
-        // REMEMBER to vary the size of the data file (see above)
-        state.searchengine.search("denmark");
+      // STUDENTS, make your changes here
+      // REMEMBER to vary the size of the data file (see above)
+      //Initialize list of search words
+      String[] searchWords = {"denmark","sweden","iceland","germany","england","norway",
+          "france","belgium","poland","italy","spain","greece","austria","latvia","estonia",
+          "switzerland","ireland","netherlands","scotland","wales"};
+      //Call the search method of searchEngine for every search word
+      for (String searchWord : searchWords) {
+        state.searchengine.search(searchWord);
+      }
     }
 
     /**
