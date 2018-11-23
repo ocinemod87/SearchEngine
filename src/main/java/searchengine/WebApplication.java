@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 // Other Imports
-import java.util.List;
+import java.util.Set;
 
 /**
  * Turns our search engine into a Web application, using Spring
@@ -29,7 +29,7 @@ public class WebApplication {
 
     /**
      * Starts a web server that serves our search engine to the
-     * Web. It reads the list of websites from the input file given as
+     * Web. It reads the set of websites from the input file given as
      * argument, constructs an instance of {@code SearchEngine} using
      * that, and finally, starts a web server.
      *
@@ -39,7 +39,7 @@ public class WebApplication {
         System.out.println("Welcome to the SearchEngine!");
         
         System.out.println("Reading database...");
-        List<Website> sites = FileHelper.parseFile(args);
+        Set<Website> sites = FileHelper.parseFile(args);
         
         System.out.println("Building the search engine...");
         searchengine = new SearchEngine(sites);
@@ -56,18 +56,18 @@ public class WebApplication {
      * matching the given query. This method is invoked by the web
      * server whenever it receives an HTTP request to "/search".
      * @param query the query string
-     * @return the list of websites that matches the query
+     * @return the set of websites that matches the query
      */
     @CrossOrigin(origins = "*")
     @RequestMapping("/search")
-    public List<Website> search(@RequestParam(value="query", defaultValue="") String query) {
+    public Set<Website> search(@RequestParam(value="query", defaultValue="") String query) {
         
         System.out.println("Handling request for query word \"" + query + "\"");
 
-        List<Website> resultList = searchengine.search(query);
+        Set<Website> resultSet = searchengine.search(query);
         
-        System.out.println("Found " + resultList.size() + " websites.");
+        System.out.println("Found " + resultSet.size() + " websites.");
         
-        return resultList;
+        return resultSet;
     }
 }

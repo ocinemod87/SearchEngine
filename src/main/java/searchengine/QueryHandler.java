@@ -1,6 +1,6 @@
 package searchengine;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is responsible for answering queries to our search engine.
@@ -29,11 +29,29 @@ public class QueryHandler {
      * matches the whole query, if it matches at least one subquery.
      *
      * @param line the query string
-     * @return the list of websites that matches the query
+     * @return the set of websites that matches the query
      */
-    public List<Website> getMatchingWebsites(String line) {
-        List<Website> results = new ArrayList<>();
-        results.addAll(idx.lookup(line));
+    public Set<Website> getMatchingWebsites(String line) {
+        Set<Website> results = new HashSet<>();
+        
+        String[] subquerys = line.split("\\sOR\\s");      
+        for (int j=0; j<subquerys.length; j++) {
+        	String[] words = subquerys[j].split("\\s"); 
+            results.addAll(intersect(words));        	
+        }
+        
         return results;
     }
+    
+    private Set<Website> intersect(String[] words) {
+    	Set<Website> results = new HashSet<>();
+    	
+    	// intersection of sets of websites containing the words
+        results.addAll(idx.lookup(words[0]));
+        for (int i=1; i<words.length; i++) {
+        	results.retainAll(idx.lookup(words[i]));
+        }
+        return results;
+    }
+    
 }

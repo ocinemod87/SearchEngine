@@ -1,7 +1,7 @@
 package searchengine;
 
-import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Turns our search engine into a command-line application. Queries
@@ -16,7 +16,7 @@ public class CLIApplication {
 
     /**
      * Starts a web server that serves our search engine to the
-     * Web. It reads the list of websites from the input file given as
+     * Web. It reads the set of websites from the input file given as
      * argument, constructs an instance of {@code SearchEngine} using
      * that, and finally, starts a web server.
      *
@@ -26,7 +26,7 @@ public class CLIApplication {
         System.out.println("Welcome to the SearchEngine!");
         
         System.out.println("Reading database...");
-        List<Website> sites = FileHelper.parseFile(args);
+        Set<Website> sites = FileHelper.parseFile(args);
         
         System.out.println("Building the search engine...");
         searchengine = new SearchEngine(sites);

@@ -4,9 +4,10 @@ package searchengine;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.Set;
 // For reading configuration file
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -31,12 +32,12 @@ public class FileHelper {
      *
      * @param filename The filename of the file that we want to
      * load. Needs to include the directory path as well.
-     * @return The list of websites that contain all websites that
+     * @return The set of websites that contain all websites that
      * were found in the file.
      */
-    public static List<Website> parseFile(String filename) {
+    public static Set<Website> parseFile(String filename) {
         // Will contain all the websites that we have found in the file
-        List<Website> sites = new ArrayList<Website>();
+        Set<Website> sites = new HashSet<>();
 
         // We use these variables to store the url, title, and the
         // words that we find for a website in the file
@@ -118,7 +119,7 @@ public class FileHelper {
         return database;
     }
 
-    public static List<Website> parseFile(String[] args) {
+    public static Set<Website> parseFile(String[] args) {
         String database;
         if (args.length < 1) {
             database = FileHelper.readConfig();
