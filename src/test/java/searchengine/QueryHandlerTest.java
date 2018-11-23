@@ -27,6 +27,12 @@ class QueryHandlerTest {
         assertEquals("example1", qh.getMatchingWebsites("word1").get(0).getTitle());
         assertEquals(2, qh.getMatchingWebsites("word2").size());
     }
+    @Test
+    void testInvalidInput(){
+        assertEquals(1,qh.getMatchingWebsites("WORD1").size());
+        assertEquals("example1", qh.getMatchingWebsites("WoRd1").get(0).getTitle());
+        assertEquals(2, qh.getMatchingWebsites("woRD2").size());
+    }
 
     // @Test
     // void testMultipleWords() {
