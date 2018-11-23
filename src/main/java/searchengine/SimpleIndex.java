@@ -1,13 +1,13 @@
 package searchengine;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class SimpleIndex implements Index {
 
     /**
      * The list of websites stored in the index.
      */
-    private List<Website> sites = null;
+    private Collection<Website> sites = null;
 
     /**
      * The build method processes a list of websites into the index data structure.
@@ -15,7 +15,7 @@ public class SimpleIndex implements Index {
      * @param sites The list of websites that should be indexed
      */
     @Override
-    public void build(List<Website> sites) {
+    public void build(Collection<Website> sites) {
         this.sites = sites;
     }
 
@@ -26,8 +26,8 @@ public class SimpleIndex implements Index {
      * @return the list of websites that contains the query word.
      */
     @Override
-    public List<Website> lookup(String query) {
-        List<Website> result = new ArrayList<Website>();
+    public Collection<Website> lookup(String query) {
+        Collection<Website> result = new ArrayList<Website>();
         for (Website w: sites) {
             if (w.containsWord(query)) {
                 result.add(w);

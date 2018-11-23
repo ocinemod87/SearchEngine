@@ -1,5 +1,5 @@
 package searchengine;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * The index data structure provides a way to build an index from
@@ -13,7 +13,7 @@ public interface Index {
      *
      * @param sites The list of websites that should be indexed
      */
-    void build(List<Website> sites);
+    void build(Collection<Website> sites);
 
     /**
      * Given a query string, returns a list of all websites that contain the query.
@@ -21,5 +21,5 @@ public interface Index {
      * @return the list of websites that contains the query word.
      */
 
-    List<Website> lookup(String query);
+    Collection<Website> lookup(String query);
 }

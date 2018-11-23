@@ -19,6 +19,7 @@ public class Website {
      */
     private String url;
 
+
     /**
      * a list of words storing the words on the website
      */
@@ -56,6 +57,13 @@ public class Website {
         return url;
     }
 
+    /**
+     * Returns the website's list of words
+     * @return website's list of words
+     */
+    public List<String> getWords() {
+        return words;
+    }
 
     /**
      * Checks whether a word is present on the website or not.
