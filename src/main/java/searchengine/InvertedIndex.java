@@ -40,6 +40,10 @@ abstract public class InvertedIndex implements Index {
      */
     @Override
     public List<Website> lookup(String query){
-        return map.get(query);
+
+        if(map.containsKey(query)){
+            return map.get(query);
+        }
+        return null;
     }
 }
