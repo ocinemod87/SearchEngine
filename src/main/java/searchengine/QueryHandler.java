@@ -27,11 +27,14 @@ public class QueryHandler {
      * has the form "word1 word2 word3 ...". A website matches
      * a subquery if all the words occur on the website. A website
      * matches the whole query, if it matches at least one subquery.
+     * 
+     * The query string will be converted to lowercase to match the case of the data
      *
      * @param line the query string
      * @return the list of websites that matches the query
      */
     public List<Website> getMatchingWebsites(String line) {
+        line = line.toLowerCase();
         List<Website> results = new ArrayList<>();
         results.addAll(idx.lookup(line));
         return results;

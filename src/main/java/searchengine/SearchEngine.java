@@ -28,7 +28,6 @@ public class SearchEngine {
 
     /**
      * Returns the list of websites matching the query.
-     * Converts the query to lowercase to match the case of the data
      *
      * @param query the query
      * @return the list of websites matching the query
@@ -37,7 +36,6 @@ public class SearchEngine {
         if (query == null || query.isEmpty() ) {
             return new ArrayList<Website>();
         }
-        query = query.toLowerCase();
         List<Website> resultList = queryHandler.getMatchingWebsites(query);
         return resultList;
     }
