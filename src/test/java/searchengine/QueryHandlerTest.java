@@ -16,6 +16,7 @@ class QueryHandlerTest {
         sites.add(new Website("1.com","example1", Arrays.asList("word1", "word2")));
         sites.add(new Website("2.com","example2", Arrays.asList("word2", "word3")));
         sites.add(new Website("3.com","example3", Arrays.asList("word3", "word4", "word5")));
+        sites.add(new Website("4.com","example4", Arrays.asList("word-3", "word_4", "word5")));
         Index idx = new SimpleIndex();
         idx.build(sites);
         qh = new QueryHandler(idx);
@@ -26,6 +27,15 @@ class QueryHandlerTest {
         assertEquals(1, qh.getMatchingWebsites("word1").size());
         assertEquals("example1", qh.getMatchingWebsites("word1").get(0).getTitle());
         assertEquals(2, qh.getMatchingWebsites("word2").size());
+    }
+    @Test
+    void testInvalidInput(){
+        assertEquals(1,qh.getMatchingWebsites("WORD1").size());
+        assertEquals("example1", qh.getMatchingWebsites("WoRd1").get(0).getTitle());
+        assertEquals(2, qh.getMatchingWebsites("woRD2").size());
+        assertEquals(1, qh.getMatchingWebsites("word-3").size()); // Separated by dash
+        assertEquals(1, qh.getMatchingWebsites("wOrD_4").size()); // Random case and separated by underscore
+        assertEquals(0, qh.getMatchingWebsites("").size()); // The empty string
     }
 
     // @Test
