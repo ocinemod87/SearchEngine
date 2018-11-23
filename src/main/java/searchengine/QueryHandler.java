@@ -1,6 +1,8 @@
 package searchengine;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class is responsible for answering queries to our search engine.
@@ -8,10 +10,13 @@ import java.util.List;
 
 public class QueryHandler {
 
-    /**
-     * The index the QueryHandler uses for answering queries.
-     */
+    /** The index the QueryHandler uses for answering queries. */
     private Index idx = null;
+
+    /** The regex used to validate queries - and the corresponding {@code Pattern} and {@code Matcher} objects. */
+    private final String REGEX = "\\b([-\\w]+)\\b";
+    private Pattern pattern;
+    private Matcher matcher;
 
     /**
      * The constructor
@@ -19,6 +24,7 @@ public class QueryHandler {
      */
     public QueryHandler(Index idx) {
         this.idx = idx;
+        pattern = Pattern.compile(REGEX);
     }
 
     /**
@@ -36,7 +42,21 @@ public class QueryHandler {
     public List<Website> getMatchingWebsites(String line) {
         line = line.toLowerCase();
         List<Website> results = new ArrayList<>();
-        results.addAll(idx.lookup(line));
+        
+        if (isValidInput(line)){
+            results.addAll(idx.lookup(matcher.group()));   
+        }
+        
         return results;
+    }
+
+    /**
+     * isValidInput takes a query and checks it against {@code REGEX} defining valid input
+     * @param line the query string
+     * @return true if valid, false if not
+     */
+    public boolean isValidInput(String line){
+        matcher = pattern.matcher(line);
+        return matcher.find();
     }
 }
