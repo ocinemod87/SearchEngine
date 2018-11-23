@@ -43,21 +43,10 @@ public abstract class InvertedIndex implements Index {
      */
     @Override
     public Collection<Website> lookup(String query){
-    	
-//    	Pattern oneWord = Pattern.compile("(\\w)");
-//    	Pattern twoWords = Pattern.compile("(\\w)\\s(\\w)");  // two words separated by a single whitespace
-//		Matcher queryMatcher = twoWords.matcher(query);
-//		
-//		int numberOfWords = queryMatcher.groupCount();
-//		Set<String> setOfQueryWords = new HashSet<>();
-//		for (int n=1; n<= numberOfWords; n++) {
-//			setOfQueryWords.add(queryMatcher.group(n));	
-//			
-//			map.get(queryMatcher.group(n));
-//		}
-//		
-//		List<Website> list1 = 
-		
-	    return map.get(query);
+
+        if(map.containsKey(query)){
+            return map.get(query);
+        }
+        return null;
     }
 }
