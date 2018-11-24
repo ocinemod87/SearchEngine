@@ -1,25 +1,27 @@
 package searchengine;
+
 import java.util.Collection;
 
 /**
- * The index data structure provides a way to build an index from
- * a list of websites. It allows to lookup the websites that contain a query word.
+ * The index data structure provides a way to build an index from a list of websites. It allows to
+ * lookup the websites that contain a query word.
  *
  * @author Martin Aumüller
  */
 public interface Index {
-    /**
-     * The build method processes a list of websites into the index data structure.
-     *
-     * @param sites The list of websites that should be indexed
-     */
-    void build(Collection<Website> sites);
+  /**
+   * The build method processes a list of websites into the index data structure.
+   *
+   * @param sites The list of websites that should be indexed
+   */
+  void build(Collection<Website> sites);
 
-    /**
-     * Given a query string, returns a list of all websites that contain the query.
-     * @param query The query
-     * @return the list of websites that contains the query word.
-     */
+  /**
+   * Given a query string, returns a list of all websites that contain the query.
+   * 
+   * @param query The query
+   * @return the list of websites that contains the query word.
+   */
 
-    Collection<Website> lookup(String query);
+  Collection<Website> lookup(String query);
 }

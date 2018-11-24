@@ -1,4 +1,5 @@
 package searchengine;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,53 +11,56 @@ import java.util.regex.Pattern;
 
 public class QueryHandler {
 
-    /** The index the QueryHandler uses for answering queries. */
-    private Index idx = null;
+  /** The index the QueryHandler uses for answering queries. */
+  private Index idx = null;
 
-    /** The regex used to validate queries - and the corresponding {@code Pattern} and {@code Matcher} objects. */
-    private final String REGEX = "\\b([-\\w]+)\\b";
-    private Pattern pattern;
-    private Matcher matcher;
+  /**
+   * The regex used to validate queries - and the corresponding {@code Pattern} and {@code Matcher}
+   * objects.
+   */
+  private final String REGEX = "\\b([-\\w]+)\\b";
+  private Pattern pattern;
+  private Matcher matcher;
 
-    /**
-     * The constructor
-     * @param idx The index used by the QueryHandler.
-     */
-    public QueryHandler(Index idx) {
-        this.idx = idx;
-        pattern = Pattern.compile(REGEX);
+  /**
+   * The constructor
+   * 
+   * @param idx The index used by the QueryHandler.
+   */
+  public QueryHandler(Index idx) {
+    this.idx = idx;
+    pattern = Pattern.compile(REGEX);
+  }
+
+  /**
+   * getMachingWebsites answers queries of the type "subquery1 OR subquery2 OR subquery3 ...". A
+   * "subquery" has the form "word1 word2 word3 ...". A website matches a subquery if all the words
+   * occur on the website. A website matches the whole query, if it matches at least one subquery.
+   * 
+   * The query string will be converted to lowercase to match the case of the data
+   *
+   * @param line the query string
+   * @return the list of websites that matches the query
+   */
+  public List<Website> getMatchingWebsites(String line) {
+    line = line.toLowerCase();
+    List<Website> results = new ArrayList<>();
+
+    if (isValidInput(line)) {
+      results.addAll(idx.lookup(matcher.group()));
     }
 
-    /**
-     * getMachingWebsites answers queries of the type
-     * "subquery1 OR subquery2 OR subquery3 ...". A "subquery"
-     * has the form "word1 word2 word3 ...". A website matches
-     * a subquery if all the words occur on the website. A website
-     * matches the whole query, if it matches at least one subquery.
-     * 
-     * The query string will be converted to lowercase to match the case of the data
-     *
-     * @param line the query string
-     * @return the list of websites that matches the query
-     */
-    public List<Website> getMatchingWebsites(String line) {
-        line = line.toLowerCase();
-        List<Website> results = new ArrayList<>();
-        
-        if (isValidInput(line)){
-            results.addAll(idx.lookup(matcher.group()));   
-        }
-        
-        return results;
-    }
+    return results;
+  }
 
-    /**
-     * isValidInput takes a query and checks it against {@code REGEX} defining valid input
-     * @param line the query string
-     * @return true if valid, false if not
-     */
-    public boolean isValidInput(String line){
-        matcher = pattern.matcher(line);
-        return matcher.find();
-    }
+  /**
+   * isValidInput takes a query and checks it against {@code REGEX} defining valid input
+   * 
+   * @param line the query string
+   * @return true if valid, false if not
+   */
+  public boolean isValidInput(String line) {
+    matcher = pattern.matcher(line);
+    return matcher.find();
+  }
 }
