@@ -54,6 +54,8 @@ class QueryHandlerTest {
     assertEquals(2, qh.getMatchingWebsites("word1 OR word4").size());
     // Corner case: Does code remove duplicates?
     assertEquals(1, qh.getMatchingWebsites("word1 OR word1").size());
+    // Corner case: Does a standalone 'OR' entail a size of 0?
+    assertEquals(0, qh.getMatchingWebsites("OR").size());
 
   }
 
