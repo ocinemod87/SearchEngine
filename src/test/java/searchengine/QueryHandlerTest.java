@@ -40,12 +40,13 @@ class QueryHandlerTest {
     assertEquals(0, qh.getMatchingWebsites("").size()); // The empty string
   }
 
-  // @Test
-  // void testMultipleWords() {
-  // assertEquals(1, qh.getMatchingWebsites("word1 word2").size());
-  // assertEquals(1, qh.getMatchingWebsites("word3 word4").size());
-  // assertEquals(1, qh.getMatchingWebsites("word4 word3 word5").size());
-  // }
+  @Test
+  void testMultipleWords() {
+    assertEquals(1, qh.getMatchingWebsites("word1 word2").size());
+    assertEquals(1, qh.getMatchingWebsites("word3 word4").size());
+    assertEquals(1, qh.getMatchingWebsites("word4 word3 word5").size());
+    assertEquals(1, qh.getMatchingWebsites("word4 WORD3 word5?").size()); // Same as above - but with special characters
+  }
 
   // @Test
   // void testORQueries() {
