@@ -45,8 +45,8 @@ public class QueryHandler {
      */
     public List<Website> getMatchingWebsites(String input) {
 
-        // List for storing the combined results
-        List<Website> results = new ArrayList<>();
+        // Set for storing the combined results
+        Set<Website> results = new HashSet<>();
 
         // The search query is split into sub queries by the keyword 'OR'
         String[] subQueries = input.split("\\sOR\\s");
@@ -64,6 +64,11 @@ public class QueryHandler {
             query = query.toLowerCase();
             matcher = pattern.matcher(query);
 
+            // If the query equals 'or', there are no queries and the loop should be terminated
+            if (query.equals("or")) {
+                break;
+            }
+
             while (matcher.find()) {
                 if (!firstQueryDone) {
                     subResults.addAll(idx.lookup(matcher.group()));
@@ -76,6 +81,11 @@ public class QueryHandler {
             results.addAll(subResults);
         }
 
-        return results;
+        // Simple conversion to a list (to avoid changing types throughout the application (right
+        // now (at least)))
+        List<Website> resultsAsList = new ArrayList<>();
+        resultsAsList.addAll(results);
+
+        return resultsAsList;
     }
 }
