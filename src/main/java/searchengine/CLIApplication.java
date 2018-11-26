@@ -33,7 +33,7 @@ public class CLIApplication {
     System.out.println("Starting command-line interface:");
     System.out.println();
 
-    // run the search engine
+    // Run the search engine
     Scanner input = new Scanner(System.in);
     String query;
     System.out.println("Please enter your query (Q to quit), then press [Enter].");
@@ -52,5 +52,7 @@ public class CLIApplication {
       System.out.println();
       System.out.println("Please enter your query (Q to quit), then press [Enter].");
     }
+    // Close the Scanner object to prevent ressource leaks
+    input.close();
   }
 }

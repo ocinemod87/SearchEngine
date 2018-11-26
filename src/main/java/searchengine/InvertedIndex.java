@@ -1,8 +1,8 @@
 package searchengine;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -31,8 +31,8 @@ public abstract class InvertedIndex implements Index {
           // If so, map the current site to this key
           map.get(word).add(site);
         } else {
-          // If not, create a new ArrayList at the position of the key
-          List<Website> webTemp = new ArrayList<>();
+          // If not, create a new HashSet at the position of the key
+          Set<Website> webTemp = new HashSet<>();
           webTemp.add(site);
           map.put(word, webTemp);
         }
@@ -42,7 +42,7 @@ public abstract class InvertedIndex implements Index {
 
   /**
    * Returns the collection of websites mapped to the query string, returns an empty
-   * {@code ArrayList} if the query string is not contained in the indexed map.
+   * {@code HashSet} if the query string is not contained in the indexed map.
    * 
    * @param query the query string
    * @return a {@code Collection<Website>} of websites that contain the query word
@@ -53,7 +53,7 @@ public abstract class InvertedIndex implements Index {
     if (map.containsKey(query)) {
       return map.get(query);
     }
-    // Return an empty ArrayList
-    return new ArrayList<>();
+    // Return an empty HashSet
+    return new HashSet<>();
   }
 }
