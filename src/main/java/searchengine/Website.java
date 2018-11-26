@@ -26,6 +26,7 @@ public class Website {
    */
   private List<String> words;
 
+  private int wordSize = 0;
   /**
    * Creates a {@code Website} object from a url, a title, and a list of words that are contained on
    * the website.
@@ -38,6 +39,7 @@ public class Website {
     this.url = url;
     this.title = title;
     this.words = words;
+    this.wordSize = words.size();
   }
 
   /**
@@ -67,6 +69,16 @@ public class Website {
     return words;
   }
 
+  /**
+   * Returns the number of words in list of words.
+   * 
+   * @return number of words in list of words.
+   */
+  public int getWordSize() {
+    return wordSize;
+  }
+  
+  
   /**
    * Checks whether a word is present on the website or not.
    *
