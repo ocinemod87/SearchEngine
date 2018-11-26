@@ -48,14 +48,14 @@ class QueryHandlerTest {
     assertEquals(1, qh.getMatchingWebsites("word4 WORD3 word5?").size()); // Same as above - but with special characters
   }
 
-  // @Test
-  // void testORQueries() {
-  // assertEquals(3, qh.getMatchingWebsites("word2 OR word3").size());
-  // assertEquals(2, qh.getMatchingWebsites("word1 OR word4").size());
-  // // Corner case: Does code remove duplicates?
-  // assertEquals(1, qh.getMatchingWebsites("word1 OR word1").size());
+  @Test
+  void testORQueries() {
+    assertEquals(3, qh.getMatchingWebsites("word2 OR word3").size());
+    assertEquals(2, qh.getMatchingWebsites("word1 OR word4").size());
+    // Corner case: Does code remove duplicates?
+    assertEquals(1, qh.getMatchingWebsites("word1 OR word1").size());
 
-  // }
+  }
 
   // Test for problematic input
   @Test

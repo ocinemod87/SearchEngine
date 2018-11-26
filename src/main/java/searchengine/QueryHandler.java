@@ -2,6 +2,8 @@ package searchengine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,33 +39,41 @@ public class QueryHandler {
      * "subquery" has the form "word1 word2 word3 ...". A website matches a subquery if all the
      * words occur on the website. A website matches the whole query, if it matches at least one
      * subquery.
-     * 
-     * The query string will be converted to lowercase to match the case of the data
      *
-     * @param line the query string
-     * @return the list of websites that matches the query
+     * @param input the query string
+     * @return the set of websites that matches the query
      */
-    public List<Website> getMatchingWebsites(String line) {
-        line = line.toLowerCase();
-        matcher = pattern.matcher(line);
-        List<Website> results = null;
+    public List<Website> getMatchingWebsites(String input) {
 
-        while (matcher.find()) {
+        // List for storing the combined results
+        List<Website> results = new ArrayList<>();
 
-            // If the list with results is null, initialize it and add all the results from the
-            // first lookup
-            if (results == null) {
-                results = new ArrayList<>();
-                results.addAll(idx.lookup(matcher.group()));
-            } else {
-                // Else, retain the intersection of the following sets
-                results.retainAll(idx.lookup(matcher.group()));
+        // The search query is split into sub queries by the keyword 'OR'
+        String[] subQueries = input.split("\\sOR\\s");
+
+        // Go through each of the sub queries and get the results
+        for (String query : subQueries) {
+
+            // Set for storing the results for this sub query
+            Set<Website> subResults = new HashSet<>();
+
+            // Boolean to define whether the lookups should be added or retained
+            boolean firstQueryDone = false;
+
+            // The query string is converted to lowercase to match the case of the data
+            query = query.toLowerCase();
+            matcher = pattern.matcher(query);
+
+            while (matcher.find()) {
+                if (!firstQueryDone) {
+                    subResults.addAll(idx.lookup(matcher.group()));
+                    firstQueryDone = true;
+                } else {
+                    subResults.retainAll(idx.lookup(matcher.group()));
+                }
             }
-        }
 
-        // Prevent returning null
-        if (results == null) {
-            results = new ArrayList<>();
+            results.addAll(subResults);
         }
 
         return results;
