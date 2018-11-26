@@ -56,7 +56,9 @@ class QueryHandlerTest {
     assertEquals(1, qh.getMatchingWebsites("word1 OR word1").size());
     // Corner case: Does a standalone 'OR' entail a size of 0?
     assertEquals(0, qh.getMatchingWebsites("OR").size());
-
+    // Corner case: Does the code support 'OR' at the beginning og end of the query?
+    assertEquals(3, qh.getMatchingWebsites("OR word2 OR word3").size());
+    assertEquals(2, qh.getMatchingWebsites("word1 OR word4 OR ").size());
   }
 
   // Test for problematic input
