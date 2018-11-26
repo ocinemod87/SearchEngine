@@ -49,7 +49,7 @@ public class QueryHandler {
         Set<Website> results = new HashSet<>();
 
         // The search query is split into sub queries by the keyword 'OR'
-        String[] subQueries = input.split("\\sOR\\s");
+        String[] subQueries = input.split("\\bOR\\b");
 
         // Go through each of the sub queries and get the results
         for (String query : subQueries) {
@@ -60,14 +60,14 @@ public class QueryHandler {
             // Boolean to define whether the lookups should be added or retained
             boolean firstQueryDone = false;
 
+            // If the query equals 'OR', there are no queries and the loop should be terminated
+            if (query.equals("OR")) {
+                break;
+            }            
+
             // The query string is converted to lowercase to match the case of the data
             query = query.toLowerCase();
             matcher = pattern.matcher(query);
-
-            // If the query equals 'or', there are no queries and the loop should be terminated
-            if (query.equals("or")) {
-                break;
-            }
 
             while (matcher.find()) {
                 if (!firstQueryDone) {
