@@ -67,13 +67,7 @@ public class QueryHandler {
     }
     
     Score.rankSites(results, corpus, line);
-    results.sort(new Comparator<Website>() {
-      @Override
-      public int compare(Website site1, Website site2) {
-          return (int) (site2.getRank() - site1.getRank());
-      }
-  }); 
-
+    results.sort( (site1, site2) -> Double.compare(site2.getRank(), site1.getRank()));
     return results;
   }
 
