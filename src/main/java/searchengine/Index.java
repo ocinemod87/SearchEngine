@@ -22,6 +22,5 @@ public interface Index {
    * @param query The query
    * @return the list of websites that contains the query word.
    */
-
-  Collection<Website> lookup(String query);
+  Collection<Website> lookup(String query); 
 }

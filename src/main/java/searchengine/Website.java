@@ -1,7 +1,9 @@
 package searchengine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A website is the basic entity of the search engine. It has a url, a title, and a list of words.
@@ -25,8 +27,22 @@ public class Website {
    * a list of words storing the words on the website
    */
   private List<String> words;
+  
+  /**
+   * a map from word to wordcount
+   */
+  Map<String, Integer> wordCount; // package private
 
+  /**
+   * the number of words on the website.
+   */
   private int wordSize = 0;
+  
+  /**
+   * the current rank of the website. Depends on both the query and the other websites in the "corpus".
+   */
+  private double rank;
+  
   /**
    * Creates a {@code Website} object from a url, a title, and a list of words that are contained on
    * the website.
@@ -40,6 +56,19 @@ public class Website {
     this.title = title;
     this.words = words;
     this.wordSize = words.size();
+    
+    // build the map which holds words and corresponding word counts for the website.
+    wordCount = new HashMap<>();
+    int counter = 0;
+    for (String word : words) {
+      if (wordCount.containsKey(word)) {
+        wordCount.put(word, wordCount.get(word) + 1);
+      } else {
+        wordCount.put(word, 1);
+      }
+      counter++;
+    }
+    assert(counter == wordSize); 
   }
 
   /**
@@ -78,7 +107,14 @@ public class Website {
     return wordSize;
   }
   
-  
+  public double getRank() {
+    return rank;
+  }
+
+  public void setRank(double rank) {
+    this.rank = rank;
+  }
+
   /**
    * Checks whether a word is present on the website or not.
    *
@@ -94,4 +130,5 @@ public class Website {
     return "Website{" + "title='" + title + '\'' + ", url='" + url + '\'' + ", words=" + words
         + '}';
   }
+  
 }

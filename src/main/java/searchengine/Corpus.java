@@ -4,28 +4,29 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Corpus { // could fairly easy be made to implement Index
-  private Collection<Website> sites;
+public class Corpus { // could fairly easy be made to implement Index, but cannot see why it should.
   Map<String, Integer> index; // package private
-  int wordsize = 0;
+  int wordSize = 0;  // package private
   
-  // what will happend if class is instatiated with empty constructor???
-  // is it compile-time Error or will it call super()?
-
-  public Corpus(Collection<Website> sites) {
-    this.sites = sites;
+  public Corpus() {
     this.index = new TreeMap<>();
   }
 
-  public void build() {
+  //build the map of words
+  public void build(Collection<Website> sites) {
     for (Website site : sites) {
       for (String word : site.getWords()) {
-        if (index.containsKey(word)) {
-          index.put(word, index.get(word) + 1);
+        
+        // number of times the word occur on website site.
+        int n = site.wordCount.get(word);
+        
+        // update the "index"
+        if (this.index.containsKey(word)) {
+          this.index.put(word, this.index.get(word) + n);
         } else {
-          index.put(word, 1);
+          this.index.put(word, n);
         }
-        wordsize++;
+        wordSize += n;
       }
     }
   }

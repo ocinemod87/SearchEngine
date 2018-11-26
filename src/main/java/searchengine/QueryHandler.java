@@ -1,6 +1,7 @@
 package searchengine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +15,9 @@ public class QueryHandler {
   /** The index the QueryHandler uses for answering queries. */
   private Index idx = null;
 
+  /** The corpus */
+  private Corpus corpus = null;
+  
   /**
    * The regex used to validate queries - and the corresponding {@code Pattern} and {@code Matcher}
    * objects.
@@ -33,6 +37,18 @@ public class QueryHandler {
   }
 
   /**
+   * Another constructor
+   * 
+   * @param idx The index used by the QueryHandler.
+   */
+  public QueryHandler(Index idx, Corpus corpus) {
+    this.idx = idx;
+    this.corpus = corpus;
+    pattern = Pattern.compile(REGEX);
+  }
+  
+  
+  /**
    * getMachingWebsites answers queries of the type "subquery1 OR subquery2 OR subquery3 ...". A
    * "subquery" has the form "word1 word2 word3 ...". A website matches a subquery if all the words
    * occur on the website. A website matches the whole query, if it matches at least one subquery.
@@ -49,6 +65,14 @@ public class QueryHandler {
     if (isValidInput(line)) {
       results.addAll(idx.lookup(matcher.group()));
     }
+    
+    Score.rankSites(results, corpus, line);
+    results.sort(new Comparator<Website>() {
+      @Override
+      public int compare(Website site1, Website site2) {
+          return (int) (site2.getRank() - site1.getRank());
+      }
+  }); 
 
     return results;
   }

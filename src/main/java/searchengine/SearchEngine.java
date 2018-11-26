@@ -22,8 +22,10 @@ public class SearchEngine {
    */
   public SearchEngine(List<Website> sites) {
     Index idx = new InvertedIndexTreeMap();
+    Corpus corpus = new Corpus();
     idx.build(sites);
-    queryHandler = new QueryHandler(idx);
+    corpus.build(sites);
+    queryHandler = new QueryHandler(idx, corpus);
   }
 
   /**
