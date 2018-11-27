@@ -1,5 +1,6 @@
 package searchengine;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -13,26 +14,18 @@ public class CLIApplication {
   // Search Engine instance
   public static SearchEngine searchengine;
 
-    /**
-     * Starts a web server that serves our search engine to the
-     * Web. It reads the set of websites from the input file given as
-     * argument, constructs an instance of {@code SearchEngine} using
-     * that, and finally, starts a web server.
-     *
-     * @param args command-line arguments.
-     */
-    public static void main(String[] args) {
-        System.out.println("Welcome to the SearchEngine!");
-        
-        System.out.println("Reading database...");
-        Set<Website> sites = FileHelper.parseFile(args);
-        
-        System.out.println("Building the search engine...");
-        searchengine = new SearchEngine(sites);
-
+  /**
+   * Starts a web server that serves our search engine to the Web. It reads the set of websites from
+   * the input file given as argument, constructs an instance of {@code SearchEngine} using that,
+   * and finally, starts a web server.
+   *
+   * @param args command-line arguments.
+   */
+  public static void main(String[] args) {
+    System.out.println("Welcome to the SearchEngine!");
 
     System.out.println("Reading database...");
-    List<Website> sites = FileHelper.parseFile(args);
+    Set<Website> sites = FileHelper.parseFile(args);
 
     System.out.println("Building the search engine...");
     searchengine = new SearchEngine(sites);
@@ -51,9 +44,9 @@ public class CLIApplication {
         break;
       }
       System.out.println();
-      sites = searchengine.search(query);
-      System.out.println("Found " + sites.size() + " websites matching the query.");
-      for (Website w : sites) {
+      List<Website> resultList = searchengine.search(query);
+      System.out.println("Found " + resultList.size() + " websites matching the query.");
+      for (Website w : resultList) {
         System.out.println(w.getTitle() + ":");
         System.out.println("  " + w.getUrl());
       }

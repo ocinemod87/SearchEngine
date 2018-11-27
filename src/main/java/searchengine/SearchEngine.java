@@ -1,6 +1,8 @@
 package searchengine;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The search engine. Upon receiving a list of websites, it performs the necessary configuration
@@ -19,7 +21,7 @@ public class SearchEngine {
    *
    * @param sites the list of websites
    */
-  public SearchEngine(List<Website> sites) {
+  public SearchEngine(Set<Website> sites) {
     Index idx = new InvertedIndexTreeMap();
     Corpus corpus = new Corpus();
     idx.build(sites);
@@ -35,7 +37,7 @@ public class SearchEngine {
    */
   public List<Website> search(String query) {
     if (query == null || query.isEmpty()) {
-      return new ArrayList<Website>();
+      return new ArrayList<>();
     }
     List<Website> resultList = queryHandler.getMatchingWebsites(query);
     return resultList;

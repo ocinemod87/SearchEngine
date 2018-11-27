@@ -19,25 +19,21 @@ import java.util.Properties;
  */
 public class FileHelper {
 
-    /**
-     * Parses a file and extracts all the websites that are contained
-     * in the file.
-     *
-     * Each file lists a number of websites including their URL, their
-     * title, and the words that appear on a website. In particular, a
-     * website starts with a line "*PAGE:" that is followed by the URL
-     * of the website. The next line represents the title of the
-     * website in natural language.  This line is followed by a list
-     * of words that occur on the page.
-     *
-     * @param filename The filename of the file that we want to
-     * load. Needs to include the directory path as well.
-     * @return The set of websites that contain all websites that
-     * were found in the file.
-     */
-    public static Set<Website> parseFile(String filename) {
-        // Will contain all the websites that we have found in the file
-        Set<Website> sites = new HashSet<>();
+  /**
+   * Parses a file and extracts all the websites that are contained in the file.
+   *
+   * Each file lists a number of websites including their URL, their title, and the words that
+   * appear on a website. In particular, a website starts with a line "*PAGE:" that is followed by
+   * the URL of the website. The next line represents the title of the website in natural language.
+   * This line is followed by a list of words that occur on the page.
+   *
+   * @param filename The filename of the file that we want to load. Needs to include the directory
+   *        path as well.
+   * @return The set of websites that contain all websites that were found in the file.
+   */
+  public static Set<Website> parseFile(String filename) {
+    // Will contain all the websites that we have found in the file
+    Set<Website> sites = new HashSet<>();
 
 
     // We use these variables to store the url, title, and the
@@ -120,23 +116,21 @@ public class FileHelper {
   }
 
 
-    public static Set<Website> parseFile(String[] args) {
-        String database;
-        if (args.length < 1) {
-            database = FileHelper.readConfig();
-            if (database == null || database.isEmpty() ) {
-                System.out.println("Error: Filename is missing");
-                System.exit(1);
-            } else {
-                System.out.println("Path \"" + database + "\" from config.properties.");
-            }
-        } else {
-            database = args[0];
-            System.out.println("Path \"" + database + "\" as program argument.");
-        }
-        return parseFile(database);
-
+  public static Set<Website> parseFile(String[] args) {
+    String database;
+    if (args.length < 1) {
+      database = FileHelper.readConfig();
+      if (database == null || database.isEmpty()) {
+        System.out.println("Error: Filename is missing");
+        System.exit(1);
+      } else {
+        System.out.println("Path \"" + database + "\" from config.properties.");
+      }
+    } else {
+      database = args[0];
+      System.out.println("Path \"" + database + "\" as program argument.");
     }
     return parseFile(database);
+
   }
 }

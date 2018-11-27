@@ -1,6 +1,7 @@
 package searchengine;
 
 import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 
 /**
@@ -25,7 +26,7 @@ public class Website {
    * a list of words storing the words on the website
    */
   private List<String> words;
-  
+
   /**
    * a map from word to wordcount
    */
@@ -35,12 +36,13 @@ public class Website {
    * the number of words on the website.
    */
   private int wordSize = 0;
-  
+
   /**
-   * the current rank of the website. Depends on both the query and the other websites in the "corpus".
+   * the current rank of the website. Depends on both the query and the other websites in the
+   * "corpus".
    */
   private double rank;
-  
+
   /**
    * Creates a {@code Website} object from a url, a title, and a list of words that are contained on
    * the website.
@@ -54,7 +56,7 @@ public class Website {
     this.title = title;
     this.words = words;
     this.wordSize = words.size();
-    
+
     // build the map which holds words and corresponding word counts for the website.
     wordCount = new HashMap<>();
     int counter = 0;
@@ -66,7 +68,7 @@ public class Website {
       }
       counter++;
     }
-    assert(counter == wordSize); 
+    assert (counter == wordSize);
   }
 
   /**
@@ -104,7 +106,7 @@ public class Website {
   public int getWordSize() {
     return wordSize;
   }
-  
+
   public double getRank() {
     return rank;
   }
@@ -128,5 +130,5 @@ public class Website {
     return "Website{" + "title='" + title + '\'' + ", url='" + url + '\'' + ", words=" + words
         + '}';
   }
-  
+
 }

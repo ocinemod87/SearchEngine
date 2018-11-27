@@ -10,9 +10,9 @@ public interface Score {
     int wordSize = site.getWordSize();
     double wordCount = (double) site.wordCount.get(word);
     double corpusCount = (double) corpus.index.get(word);
-    return (wordCount / wordSize) / (corpusCount / corpus.wordSize);  // not correct math yet.
-   }
-  
+    return (wordCount / wordSize) / (corpusCount / corpus.wordSize); // not correct math yet.
+  }
+
   // rank the sites according to the single word.
   public static void rankSites(Collection<Website> sites, Corpus corpus, String word) {
     for (Website site : sites) {
@@ -22,7 +22,7 @@ public interface Score {
 
   // rank the sites according to the whole query.
   public static void rankQuery(Collection<Website> sites, Corpus corpus, String query) {
-    
+
   }
-  
+
 }

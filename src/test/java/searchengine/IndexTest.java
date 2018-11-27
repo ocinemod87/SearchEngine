@@ -4,17 +4,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndexTest {
-    Index simpleIndex = null;
-    Index treeIndex = null;
-    Index hashIndex = null;
+  Index simpleIndex = null;
+  InvertedIndex treeIndex = null;
+  InvertedIndex hashIndex = null;
 
   @BeforeEach
   void setUp() {
@@ -65,7 +63,7 @@ class IndexTest {
    */
   private void buildListOfNulls(Index index) {
     // create a list of nulls
-    ArrayList<Website> nullSites = new ArrayList<>();
+    HashSet<Website> nullSites = new HashSet<>();
     for (int i = 0; i < 10; i++) {
       nullSites.add(null);
     }
@@ -101,7 +99,7 @@ class IndexTest {
   private void addEntryToMapWithoutBuild(InvertedIndex index) {
     // ideally it shouldn't be allowed to add things to the map without using build.
     assertThrows(Exception.class, () -> {
-      index.map.put("bypassing-build", new ArrayList<>());
+      index.map.put("bypassing-build", new HashSet<>());
     }, "Should not be able to put things into map without using the build method");
   }
 
@@ -135,7 +133,7 @@ class IndexTest {
     // I.e the message is only constructed if it is needed, that is if the test fail.
     // See https://junit.org/junit5/docs/current/user-guide/#writing-tests-assertions
     assertNotNull(index.lookup("anyword"), () -> "lookup() should always return a collection");
-    assertTrue(index.lookup("anyword") instanceof Collection,
+    assertTrue(index.lookup("anyword") instanceof Set,
         () -> "lookup() should always return a collection");
   }
 
@@ -163,7 +161,7 @@ class IndexTest {
   private void lookup(Index index) {
 
     // setup for testing the lookup method
-    List<Website> sites = new ArrayList<Website>();
+    Set<Website> sites = new HashSet<>();
     sites.add(new Website("example1.com", "example1", Arrays.asList("word1", "word2", "word1")));
     sites.add(new Website("example2.com", "example2", Arrays.asList("word2", "word3")));
     index.build(sites);
@@ -172,7 +170,7 @@ class IndexTest {
     assertAll("check return type", () -> {
       assertNotNull(index.lookup("word1"));
       assertNotNull(index.lookup("word55"));
-      assertTrue(index.lookup("word1") instanceof Collection,
+      assertTrue(index.lookup("word1") instanceof Set,
           "lookup must return a collection of websites");
 
       // if return type is correct, the following checks if size is correct.

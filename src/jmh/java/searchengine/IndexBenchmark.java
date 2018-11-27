@@ -13,6 +13,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 // Other Imports
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,25 +33,22 @@ import java.util.Set;
  */
 public class IndexBenchmark {
 
-    /**
-     * The state used by all each run of the benchmark. This is JMH's
-     * way to share state between benchmark runs; you do not need to
-     * know how it works (this is an "inner class"). This is where we
-     * create an instance of {@code SearchEngine}. We want multiple
-     * queries to the same {@code SearchEngine} instance, since
-     * otherwise, it would be hard to argue that the time measurements
-     * we get are the index look-ups specifically, and not e.g. the
-     * time it takes to read a file, obtain a {@code SearchEngine}
-     * instance, and so on.
-     */
-    @State(Scope.Benchmark)
-    public static class BenchmarkState {
-        public SearchEngine searchengine;
-        public BenchmarkState(){
-            // Executed each time "# Fork: X of 5" appears in the output.
-            Set<Website> sites = FileHelper.parseFile("data/enwiki-small.txt");
-            searchengine = new SearchEngine(sites);
-        }
+  /**
+   * The state used by all each run of the benchmark. This is JMH's way to share state between
+   * benchmark runs; you do not need to know how it works (this is an "inner class"). This is where
+   * we create an instance of {@code SearchEngine}. We want multiple queries to the same
+   * {@code SearchEngine} instance, since otherwise, it would be hard to argue that the time
+   * measurements we get are the index look-ups specifically, and not e.g. the time it takes to read
+   * a file, obtain a {@code SearchEngine} instance, and so on.
+   */
+  @State(Scope.Benchmark)
+  public static class BenchmarkState {
+    public SearchEngine searchengine;
+
+    public BenchmarkState() {
+      // Executed each time "# Fork: X of 5" appears in the output.
+      Set<Website> sites = FileHelper.parseFile("data/enwiki-small.txt");
+      searchengine = new SearchEngine(sites);
     }
   }
 
@@ -89,3 +87,5 @@ public class IndexBenchmark {
     new Runner(opt).run();
   }
 }
+
+
