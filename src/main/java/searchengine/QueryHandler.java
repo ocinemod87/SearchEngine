@@ -2,9 +2,12 @@ package searchengine;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * This class is responsible for answering queries to our search engine.
@@ -60,15 +63,27 @@ public class QueryHandler {
    */
   public List<Website> getMatchingWebsites(String line) {
     line = line.toLowerCase();
-    List<Website> results = new ArrayList<>();
+    Set<Website> results = new HashSet<>();
 
     if (isValidInput(line)) {
       results.addAll(idx.lookup(matcher.group()));
     }
     
-    Score.rankSites(results, corpus, line);
-    results.sort( (site1, site2) -> Double.compare(site2.getRank(), site1.getRank()));
-    return results;
+    // convert set of websites to a list since the sort method only works for list.
+    List<Website> resultList = results.stream().collect(Collectors.toList());
+    
+    // rank the websites that matches the query
+    Score.rankSites(resultList, corpus, line);  // using the static method Score.rankSites, maybe not OO approach
+    
+    // sort websites according to their rank.
+    // results.sort( (site1, site2) -> Double.compare(site2.getRank(), site1.getRank()));  // using the static method Double.compare, maybe not OO approach
+    
+    // alternative approach to sorting the websites. 
+    // make a Comparator from the static method Comparator.comparingDouble()
+    Comparator<Website> rankComparator = Comparator.comparingDouble(Website::getRank); 
+    resultList.sort(rankComparator.reversed());  // why do I need to reverse? take a look at ranking math again.
+    
+    return resultList;
   }
 
   /**
