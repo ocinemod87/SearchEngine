@@ -4,16 +4,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.List;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndexTest {
-  Index simpleIndex = null;
-  InvertedIndex hashIndex = null;
-  InvertedIndex treeIndex = null;
+    Index simpleIndex = null;
+    Index treeIndex = null;
+    Index hashIndex = null;
 
   @BeforeEach
   void setUp() {

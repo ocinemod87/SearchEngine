@@ -1,7 +1,6 @@
 package searchengine;
 
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * The search engine. Upon receiving a list of websites, it performs the necessary configuration

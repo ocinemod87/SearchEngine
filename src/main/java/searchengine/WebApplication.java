@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 // Other Imports
-import java.util.List;
+import java.util.Set;
 
 /**
  * Turns our search engine into a Web application, using Spring Boot. Web requests are received and
@@ -67,4 +67,5 @@ public class WebApplication {
 
     return resultList;
   }
+
 }

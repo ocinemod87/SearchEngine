@@ -4,8 +4,10 @@ package searchengine;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 // For reading configuration file
 import java.io.InputStream;
 import java.io.FileInputStream;
@@ -16,21 +18,27 @@ import java.util.Properties;
  * FileHelper contains all methods that help reading a database of websites from a file.
  */
 public class FileHelper {
-  /**
-   * Parses a file and extracts all the websites that are contained in the file.
-   *
-   * Each file lists a number of websites including their URL, their title, and the words that
-   * appear on a website. In particular, a website starts with a line "*PAGE:" that is followed by
-   * the URL of the website. The next line represents the title of the website in natural language.
-   * This line is followed by a list of words that occur on the page.
-   *
-   * @param filename The filename of the file that we want to load. Needs to include the directory
-   *        path as well.
-   * @return The list of websites that contain all websites that were found in the file.
-   */
-  public static List<Website> parseFile(String filename) {
-    // Will contain all the websites that we have found in the file
-    List<Website> sites = new ArrayList<Website>();
+
+    /**
+     * Parses a file and extracts all the websites that are contained
+     * in the file.
+     *
+     * Each file lists a number of websites including their URL, their
+     * title, and the words that appear on a website. In particular, a
+     * website starts with a line "*PAGE:" that is followed by the URL
+     * of the website. The next line represents the title of the
+     * website in natural language.  This line is followed by a list
+     * of words that occur on the page.
+     *
+     * @param filename The filename of the file that we want to
+     * load. Needs to include the directory path as well.
+     * @return The set of websites that contain all websites that
+     * were found in the file.
+     */
+    public static Set<Website> parseFile(String filename) {
+        // Will contain all the websites that we have found in the file
+        Set<Website> sites = new HashSet<>();
+
 
     // We use these variables to store the url, title, and the
     // words that we find for a website in the file
@@ -111,19 +119,23 @@ public class FileHelper {
     return database;
   }
 
-  public static List<Website> parseFile(String[] args) {
-    String database;
-    if (args.length < 1) {
-      database = FileHelper.readConfig();
-      if (database == null || database.isEmpty()) {
-        System.out.println("Error: Filename is missing");
-        System.exit(1);
-      } else {
-        System.out.println("Path \"" + database + "\" from config.properties.");
-      }
-    } else {
-      database = args[0];
-      System.out.println("Path \"" + database + "\" as program argument.");
+
+    public static Set<Website> parseFile(String[] args) {
+        String database;
+        if (args.length < 1) {
+            database = FileHelper.readConfig();
+            if (database == null || database.isEmpty() ) {
+                System.out.println("Error: Filename is missing");
+                System.exit(1);
+            } else {
+                System.out.println("Path \"" + database + "\" from config.properties.");
+            }
+        } else {
+            database = args[0];
+            System.out.println("Path \"" + database + "\" as program argument.");
+        }
+        return parseFile(database);
+
     }
     return parseFile(database);
   }

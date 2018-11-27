@@ -1,9 +1,7 @@
 package searchengine;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * A website is the basic entity of the search engine. It has a url, a title, and a list of words.
