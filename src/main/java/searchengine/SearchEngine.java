@@ -1,8 +1,10 @@
 package searchengine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The search engine. Upon receiving a list of websites, it performs the necessary configuration
@@ -14,6 +16,7 @@ import java.util.Set;
  */
 public class SearchEngine {
 
+  private Corpus corpus;
   private QueryHandler queryHandler;
 
   /**
@@ -23,10 +26,10 @@ public class SearchEngine {
    */
   public SearchEngine(Set<Website> sites) {
     Index idx = new InvertedIndexTreeMap();
-    Corpus corpus = new Corpus();
     idx.build(sites);
-    corpus.build(sites);
-    queryHandler = new QueryHandler(idx, corpus);
+    corpus = new Corpus(sites);
+    corpus.build(); // corpus is kept in SearchEngine since this is where ranking is done.
+    queryHandler = new QueryHandler(idx);  // index is passed to QueryHandler since this is where lookup is done.
   }
 
   /**
@@ -39,7 +42,20 @@ public class SearchEngine {
     if (query == null || query.isEmpty()) {
       return new ArrayList<>();
     }
-    List<Website> resultList = queryHandler.getMatchingWebsites(query);
+    Set<Website> results = queryHandler.getMatchingWebsites(query);
+    
+    // rank the websites that matches the query
+    Score.rankSites(results, this.corpus, query); // using the static method Score.rankSites, maybe not be OO-style.
+    
+    // OBS: convert set of websites to a list since the sort method only works for list.
+    // this can potentially take some time if many websites has been returned. 
+    // But the stream could also just be limited to a fixed number.  
+    List<Website> resultList = results.stream().collect(Collectors.toList());  
+
+    // make a Comparator from the static method Comparator.comparingDouble()
+    Comparator<Website> rankComparator = Comparator.comparingDouble(Website::getRank);
+    resultList.sort(rankComparator.reversed()); // why do I need to reverse?
+    
     return resultList;
   }
 }

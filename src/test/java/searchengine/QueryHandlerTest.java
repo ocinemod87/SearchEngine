@@ -18,9 +18,7 @@ class QueryHandlerTest {
     sites.add(new Website("3.com", "example3", Arrays.asList("word3", "word4", "word5")));
     Index idx = new InvertedIndexTreeMap();
     idx.build(sites);
-    Corpus corpus = new Corpus();
-    corpus.build(sites);
-    qh = new QueryHandler(idx, corpus);
+    qh = new QueryHandler(idx);
   }
 
   @Test

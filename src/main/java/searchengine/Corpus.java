@@ -4,22 +4,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class Corpus { // could fairly easy be made to implement Index, but cannot see why it should.
+/** This class holds information about the whole database (corpus) of websites.
+ * It is fairly similar to the Index classes. 
+ */
+public class Corpus { 
   Map<String, Integer> index; // package private
   int wordSize = 0; // package private
-
+  Set<Website> allSites;  // all websites in the corpus.
   Map<String, Integer> appearInSitesMap; // package private
   int totalNumberOfSites;
   
-  public Corpus() {
+  public Corpus(Set<Website> sites) {
     index = new TreeMap<>();
     appearInSitesMap = new TreeMap<>();
-    
+    allSites = sites; 
   }
 
   // build the map of words
-  public void build(Set<Website> sites) {
-    for (Website site : sites) {
+  public void build() {
+    for (Website site : allSites) {
       
       // get unique words from the site, and add 1 to the number of sites that the word appear in.
       site.getWords().stream()
@@ -47,7 +50,6 @@ public class Corpus { // could fairly easy be made to implement Index, but canno
         wordSize += n;
       }
     }
-    totalNumberOfSites = sites.size();
+    totalNumberOfSites = allSites.size();
   }
-
 }

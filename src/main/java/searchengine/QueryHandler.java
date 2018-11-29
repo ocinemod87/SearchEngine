@@ -1,10 +1,7 @@
 package searchengine;
 
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * This class is responsible for answering queries to our search engine.
@@ -15,8 +12,8 @@ public class QueryHandler {
   /** The index the QueryHandler uses for answering queries. */
   private Index idx = null;
 
-  /** The corpus */
-  private Corpus corpus = null;
+//  /** The corpus */
+//  private Corpus corpus = null;
 
   /**
    * The constructor
@@ -27,15 +24,15 @@ public class QueryHandler {
     this.idx = idx;
   }
 
-  /**
-   * Another constructor
-   * 
-   * @param idx The index used by the QueryHandler.
-   */
-  public QueryHandler(Index idx, Corpus corpus) {
-    this.idx = idx;
-    this.corpus = corpus;
-  }
+//  /**
+//   * Another constructor
+//   * 
+//   * @param idx The index used by the QueryHandler.
+//   */
+//  public QueryHandler(Index idx, Corpus corpus) {
+//    this.idx = idx;
+//    this.corpus = corpus;
+//  }
 
   /**
    * getMachingWebsites answers queries of the type "subquery1 OR subquery2 OR subquery3 ...". A
@@ -45,7 +42,7 @@ public class QueryHandler {
    * @param query the query string
    * @return the set of websites that matches the query
    */
-  public List<Website> getMatchingWebsites(String query) {
+  public Set<Website> getMatchingWebsites(String query) {
     Set<Website> results = new HashSet<>();
 
     String[] subquerys = query.split("\\sOR\\s");
@@ -53,27 +50,7 @@ public class QueryHandler {
       String[] words = subquerys[j].split("\\s");
       results.addAll(intersect(words));
     }
-    
-    // rank the websites that matches the query
-    Score.rankSites(results, corpus, query); // using the static method Score.rankSites, maybe not
-                                               // OO approach
-    
-    
-    // OBS: convert set of websites to a list since the sort method only works for list.
-    // this can potentially take some time if many websites has been returned. 
-    // But the stream could also just be limited to a fixed number.  
-    List<Website> resultList = results.stream().collect(Collectors.toList());  
-
-    // sort websites according to their rank.
-    // results.sort( (site1, site2) -> Double.compare(site2.getRank(), site1.getRank())); // using
-    // the static method Double.compare, maybe not OO approach
-
-    // alternative approach to sorting the websites.
-    // make a Comparator from the static method Comparator.comparingDouble()
-    Comparator<Website> rankComparator = Comparator.comparingDouble(Website::getRank);
-    resultList.sort(rankComparator.reversed()); // why do I need to reverse?
-    return resultList;
-
+    return results;
   }
 
   private Set<Website> intersect(String[] words) {
