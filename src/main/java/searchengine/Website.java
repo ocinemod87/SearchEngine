@@ -30,12 +30,12 @@ public class Website {
   /**
    * a map from word to wordcount
    */
-  Map<String, Integer> wordCount; // package private
+  Map<String, Integer> wordMap; // package private
 
   /**
    * the number of words on the website.
    */
-  private int wordSize = 0;
+  private int wordSize;
 
   /**
    * the current rank of the website. Depends on both the query and the other websites in the
@@ -58,17 +58,14 @@ public class Website {
     this.wordSize = words.size();
 
     // build the map which holds words and corresponding word counts for the website.
-    wordCount = new HashMap<>();
-    int counter = 0;
+    wordMap = new HashMap<>();
     for (String word : words) {
-      if (wordCount.containsKey(word)) {
-        wordCount.put(word, wordCount.get(word) + 1);
+      if (wordMap.containsKey(word)) {
+        wordMap.put(word, wordMap.get(word) + 1);
       } else {
-        wordCount.put(word, 1);
+        wordMap.put(word, 1);
       }
-      counter++;
     }
-    assert (counter == wordSize);
   }
 
   /**

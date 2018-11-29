@@ -42,24 +42,27 @@ public class QueryHandler {
    * "subquery" has the form "word1 word2 word3 ...". A website matches a subquery if all the words
    * occur on the website. A website matches the whole query, if it matches at least one subquery.
    *
-   * @param line the query string
+   * @param query the query string
    * @return the set of websites that matches the query
    */
-  public List<Website> getMatchingWebsites(String line) {
+  public List<Website> getMatchingWebsites(String query) {
     Set<Website> results = new HashSet<>();
 
-    String[] subquerys = line.split("\\sOR\\s");
+    String[] subquerys = query.split("\\sOR\\s");
     for (int j = 0; j < subquerys.length; j++) {
       String[] words = subquerys[j].split("\\s");
       results.addAll(intersect(words));
     }
-
-    // convert set of websites to a list since the sort method only works for list.
-    List<Website> resultList = results.stream().collect(Collectors.toList());
-
+    
     // rank the websites that matches the query
-    Score.rankSites(resultList, corpus, line); // using the static method Score.rankSites, maybe not
+    Score.rankSites(results, corpus, query); // using the static method Score.rankSites, maybe not
                                                // OO approach
+    
+    
+    // OBS: convert set of websites to a list since the sort method only works for list.
+    // this can potentially take some time if many websites has been returned. 
+    // But the stream could also just be limited to a fixed number.  
+    List<Website> resultList = results.stream().collect(Collectors.toList());  
 
     // sort websites according to their rank.
     // results.sort( (site1, site2) -> Double.compare(site2.getRank(), site1.getRank())); // using
@@ -68,9 +71,7 @@ public class QueryHandler {
     // alternative approach to sorting the websites.
     // make a Comparator from the static method Comparator.comparingDouble()
     Comparator<Website> rankComparator = Comparator.comparingDouble(Website::getRank);
-    resultList.sort(rankComparator.reversed()); // why do I need to reverse? take a look at ranking
-                                                // math again.
-
+    resultList.sort(rankComparator.reversed()); // why do I need to reverse?
     return resultList;
 
   }
