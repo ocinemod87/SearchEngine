@@ -2,14 +2,13 @@ package searchengine;
 
 import java.util.Set;
 
-public interface Score {
+public class Score {
+  
+  // add private empty constructor.
+  private Score() {}
 
-  public static double rankSingleCustom(Website site, Corpus corpus, String word) { // should probably
-                                                                                  // be a private
-                                                                                  // method, but
-                                                                                  // this is not
-                                                                                  // allowed in an
-                                                                                  // interface.
+  // our own "custom" ranking function
+  private static double rankSingleCustom(Website site, Corpus corpus, String word) {
 
     // score single word/term according to the document frequency and inverse corpus frequency.
     int wordSize = site.getWordSize();
@@ -20,7 +19,7 @@ public interface Score {
                                                                              // yet.
   }
 
-  public static double rankSingleTFIDF(Website site, Corpus corpus, String word) {
+  private static double rankSingleTFIDF(Website site, Corpus corpus, String word) {
 
     // score single word/term according to the document frequency and inverse corpus frequency.
     int wordSize = site.getWordSize();
@@ -30,7 +29,7 @@ public interface Score {
     return (wordCount / wordSize) * Math.log(corpus.totalNumberOfSites / siteCount);
   }
 
-  public static double rankQueryTFIDF(Website site, Corpus corpus, String query) {
+  private static double rankQueryTFIDF(Website site, Corpus corpus, String query) {
 
     double maxScoreSubQuery = 0;
 
@@ -53,7 +52,6 @@ public interface Score {
     }
     return maxScoreSubQuery;
   }
-  
   
   // setRank(). Rank the sites according to the whole query.
   public static void rankSites(Set<Website> sites, Corpus corpus, String query) {
