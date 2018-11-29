@@ -35,8 +35,7 @@ class QueryHandlerTest {
     assertEquals("example1", qh.getMatchingWebsites("WoRd1").get(0).getTitle());
     assertEquals(2, qh.getMatchingWebsites("woRD2").size());
     assertEquals(1, qh.getMatchingWebsites("word-3").size()); // Separated by dash
-    assertEquals(1, qh.getMatchingWebsites("wOrD_4").size()); // Random case and separated by
-                                                              // underscore
+    assertEquals(1, qh.getMatchingWebsites("wOrD_4").size()); // Random case and separated by underscore 
     assertEquals(0, qh.getMatchingWebsites("").size()); // The empty string
   }
 
