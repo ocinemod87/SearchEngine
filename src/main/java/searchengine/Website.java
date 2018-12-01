@@ -38,10 +38,10 @@ public class Website {
   private int wordSize;
 
   /**
-   * the current rank of the website. Depends on both the query and the other websites in the
-   * "corpus".
+   * a score object that knows how to calculate the tfidf rank of the website.
+   * Score depends on both the query and the other websites in the corpus.
    */
-  private double rank;
+  private Score score;
 
   /**
    * Creates a {@code Website} object from a url, a title, and a list of words that are contained on
@@ -55,6 +55,8 @@ public class Website {
     this.url = url;
     this.title = title;
     this.words = words;
+    this.score = new TFIDFScore();
+    
     this.wordSize = words.size();
 
     // build the map which holds words and corresponding word counts for the website.
@@ -104,12 +106,8 @@ public class Website {
     return wordSize;
   }
 
-  public double getRank() {
-    return rank;
-  }
-
-  public void setRank(double rank) {
-    this.rank = rank;
+  public Double getRank(String query, Corpus corpus) { 
+    return score.rank(this, corpus, query); // Autoboxing. Must return reference type Double for compareTo to work. 
   }
 
   /**

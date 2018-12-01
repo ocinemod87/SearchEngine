@@ -45,17 +45,21 @@ public class SearchEngine {
     Set<Website> results = queryHandler.getMatchingWebsites(query);
     
     // rank the websites that matches the query
-    Score.rankSites(results, this.corpus, query); // using the static method Score.rankSites, maybe not be OO-style.
     
     // OBS: convert set of websites to a list since the sort method only works for list.
     // this can potentially take some time if many websites has been returned. 
     // But the stream could also just be limited to a fixed number.  
     List<Website> resultList = results.stream().collect(Collectors.toList());  
 
-    // make a Comparator from the static method Comparator.comparingDouble()
-    Comparator<Website> rankComparator = Comparator.comparingDouble(Website::getRank);
-    resultList.sort(rankComparator.reversed()); // why do I need to reverse?
+    // create a nested Comparator class
+    class RankComparator implements Comparator<Website>{
+      public int compare(Website site, Website otherSite) {
+        return site.getRank(query, corpus).compareTo(otherSite.getRank(query, corpus));
+      }
+    }
     
+    // sort the websites according to their rank.
+    resultList.sort(new RankComparator().reversed());  // why do I need to reverse? 
     return resultList;
   }
 }
