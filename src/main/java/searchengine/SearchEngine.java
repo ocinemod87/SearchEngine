@@ -44,7 +44,13 @@ public class SearchEngine {
     }
     Set<Website> results = queryHandler.getMatchingWebsites(query);
     
-    // rank the websites that matches the query
+    // the websites are ordered according to rank. 
+    // The rank is calculated by the Score that belongs to the website.  
+    return orderWebsites(results, query);
+  }
+  
+  
+  private List<Website> orderWebsites(Set<Website> results, String query) {
     
     // OBS: convert set of websites to a list since the sort method only works for list.
     // this can potentially take some time if many websites has been returned. 
@@ -59,7 +65,9 @@ public class SearchEngine {
     }
     
     // sort the websites according to their rank.
-    resultList.sort(new RankComparator().reversed());  // why do I need to reverse? 
+    resultList.sort(new RankComparator().reversed());  // why do we need to reverse? 
+    
     return resultList;
   }
+  
 }

@@ -1,8 +1,12 @@
+
 package searchengine;
 
 public class TFIDFScore implements Score{
   
-  // this class has no fields! so perhaps it should be just a utility class?
+ // Rank the site according to the whole query.
+ public double rank(Website site, Corpus corpus, String query) {
+     return rankQueryTFIDF(site, corpus, query);
+ }
 
   private double rankSingleTFIDF(Website site, Corpus corpus, String word) {
     
@@ -37,10 +41,4 @@ public class TFIDFScore implements Score{
     }
     return maxScoreSubQuery;
   }
-  
-  // setRank(). Rank the site according to the whole query.
-  public double rank(Website site, Corpus corpus, String query) {
-      return rankQueryTFIDF(site, corpus, query);
-  }
-
 }

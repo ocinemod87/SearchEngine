@@ -55,7 +55,7 @@ public class Website {
     this.url = url;
     this.title = title;
     this.words = words;
-    this.score = new TFIDFScore();
+    this.score = new TFIDFScore(); // this decides which ranking algorithm is used.
     
     this.wordSize = words.size();
 
