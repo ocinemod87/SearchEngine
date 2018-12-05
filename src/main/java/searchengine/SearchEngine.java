@@ -42,7 +42,7 @@ public class SearchEngine {
     if (query == null || query.isEmpty()) {
       return new ArrayList<>();
     }
-    Set<Website> results = queryHandler.getMatchingWebsites(query);
+    List<Website> results = queryHandler.getMatchingWebsites(query);
     
     // the websites are ordered according to rank. 
     // The rank is calculated by the Score that belongs to the website.  
@@ -50,13 +50,8 @@ public class SearchEngine {
   }
   
   
-  private List<Website> orderWebsites(Set<Website> results, String query) {
+  private List<Website> orderWebsites(List<Website> resultList, String query) {
     
-    // OBS: convert set of websites to a list since the sort method only works for list.
-    // this can potentially take some time if many websites has been returned. 
-    // But the stream could also just be limited to a fixed number.  
-    List<Website> resultList = results.stream().collect(Collectors.toList());  
-
     // create a nested Comparator class
     class RankComparator implements Comparator<Website>{
       public int compare(Website site, Website otherSite) {
