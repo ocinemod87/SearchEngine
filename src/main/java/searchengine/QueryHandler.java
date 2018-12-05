@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 /**
  * This class is responsible for answering queries to our search engine.
  */
-
 public class QueryHandler {
 
   /** The index the QueryHandler uses for answering queries. */

@@ -2,6 +2,7 @@ package searchengine;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Turns our search engine into a command-line application. Queries are received on standard input,
@@ -14,9 +15,9 @@ public class CLIApplication {
   public static SearchEngine searchengine;
 
   /**
-   * Starts a web server that serves our search engine to the Web. It reads the list of websites
-   * from the input file given as argument, constructs an instance of {@code SearchEngine} using
-   * that, and finally, starts a web server.
+   * Starts a web server that serves our search engine to the Web. It reads the set of websites from
+   * the input file given as argument, constructs an instance of {@code SearchEngine} using that,
+   * and finally, starts a web server.
    *
    * @param args command-line arguments.
    */
@@ -24,7 +25,7 @@ public class CLIApplication {
     System.out.println("Welcome to the SearchEngine!");
 
     System.out.println("Reading database...");
-    List<Website> sites = FileHelper.parseFile(args);
+    Set<Website> sites = FileHelper.parseFile(args);
 
     System.out.println("Building the search engine...");
     searchengine = new SearchEngine(sites);
@@ -43,9 +44,9 @@ public class CLIApplication {
         break;
       }
       System.out.println();
-      sites = searchengine.search(query);
-      System.out.println("Found " + sites.size() + " websites matching the query.");
-      for (Website w : sites) {
+      List<Website> resultList = searchengine.search(query);
+      System.out.println("Found " + resultList.size() + " websites matching the query.");
+      for (Website w : resultList) {
         System.out.println(w.getTitle() + ":");
         System.out.println("  " + w.getUrl());
       }

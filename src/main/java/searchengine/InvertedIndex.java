@@ -1,9 +1,10 @@
 package searchengine;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The InvertedIndex data structure provides a way to build an index from a list of websites. It
@@ -12,23 +13,32 @@ import java.util.Map;
  */
 public abstract class InvertedIndex implements Index {
 
-  protected Map<String, Collection<Website>> map;
+  protected Map<String, Set<Website>> map;
 
   /**
-   * Takes a list of websites and creates a map. The keys are the words contained in these websites,
-   * the value is a list of all the websites containing that key.
+   * Takes a set of websites and creates a map. The keys are the words contained in these websites,
+   * the value is a set of all the websites containing that key word.
    * 
-   * @param sites The list of websites that should be indexed
+   * @param sites The set of websites that should be indexed
    */
   @Override
-  public void build(Collection<Website> sites) {
+  public void build(Set<Website> sites) {
+
+    if (sites == null) {
+      throw new IllegalArgumentException();
+    }
+
+    if (sites.contains(null)) {
+      throw new IllegalArgumentException();
+    }
 
     for (Website site : sites) {
       for (String word : site.getWords()) {
 
-        // Check if the map contains the current key
+        // check if the map contains the key word
         if (map.containsKey(word)) {
-          // If so, map the current site to this key
+          // if yes takes the value (a set of websites) add the site to it.
+          // if the website already is in the value-set nothing happens.
           map.get(word).add(site);
         } else {
           // If not, create a new HashSet at the position of the key
@@ -41,19 +51,19 @@ public abstract class InvertedIndex implements Index {
   }
 
   /**
-   * Returns the collection of websites mapped to the query string, returns an empty
-   * {@code HashSet} if the query string is not contained in the indexed map.
+   * Returns the set of websites which matches the query string, returns an empty
+   * {@code HashSet} if the query string does not match any sites in the map.
    * 
-   * @param query the query string
-   * @return a {@code Collection<Website>} of websites that contain the query word
+   * @param query The query
+   * @return the Set of websites that contain the query word, or null if the query word is not among
+   *         the map keys.
    */
   @Override
-  public Collection<Website> lookup(String query) {
-
+  public Set<Website> lookup(String query) {
     if (map.containsKey(query)) {
       return map.get(query);
+    } else {
+      return Collections.emptySet();
     }
-    // Return an empty HashSet
-    return new HashSet<>();
   }
 }

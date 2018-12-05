@@ -1,6 +1,6 @@
 package searchengine;
 
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * The index data structure provides a way to build an index from a list of websites. It allows to
@@ -14,7 +14,7 @@ public interface Index {
    *
    * @param sites The list of websites that should be indexed
    */
-  void build(Collection<Website> sites);
+  void build(Set<Website> sites);
 
   /**
    * Given a query string, returns a list of all websites that contain the query.
@@ -23,5 +23,5 @@ public interface Index {
    * @return the list of websites that contains the query word.
    */
 
-  Collection<Website> lookup(String query);
+  Set<Website> lookup(String query);
 }

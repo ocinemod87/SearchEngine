@@ -2,9 +2,9 @@ package searchengine;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class QueryHandlerTest {
@@ -12,12 +12,11 @@ class QueryHandlerTest {
 
   @BeforeEach
   void setUp() {
-    List<Website> sites = new ArrayList<>();
+    Set<Website> sites = new HashSet<>();
     sites.add(new Website("1.com", "example1", Arrays.asList("word1", "word2")));
     sites.add(new Website("2.com", "example2", Arrays.asList("word2", "word3")));
     sites.add(new Website("3.com", "example3", Arrays.asList("word3", "word4", "word5")));
-    sites.add(new Website("4.com", "example4", Arrays.asList("word-3", "word_4", "word5")));
-    Index idx = new SimpleIndex();
+    Index idx = new InvertedIndexTreeMap();
     idx.build(sites);
     qh = new QueryHandler(idx);
   }
@@ -25,7 +24,6 @@ class QueryHandlerTest {
   @Test
   void testSingleWord() {
     assertEquals(1, qh.getMatchingWebsites("word1").size());
-    assertEquals("example1", qh.getMatchingWebsites("word1").get(0).getTitle());
     assertEquals(2, qh.getMatchingWebsites("word2").size());
   }
 
@@ -65,6 +63,5 @@ class QueryHandlerTest {
   void testCornerCases() {
 
   }
-
 
 }

@@ -14,6 +14,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 // Other Imports
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The Indexing benchmark. This prototype benchmarks the efficiency of the search engine's index by
@@ -46,7 +47,7 @@ public class IndexBenchmark {
 
     public BenchmarkState() {
       // Executed each time "# Fork: X of 5" appears in the output.
-      List<Website> sites = FileHelper.parseFile("data/enwiki-small.txt");
+      Set<Website> sites = FileHelper.parseFile("data/enwiki-small.txt");
       searchengine = new SearchEngine(sites);
     }
   }
@@ -86,3 +87,5 @@ public class IndexBenchmark {
     new Runner(opt).run();
   }
 }
+
+

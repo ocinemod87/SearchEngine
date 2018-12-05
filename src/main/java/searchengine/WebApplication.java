@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
-// Other Imports
 import java.util.List;
+// Other Imports
+import java.util.Set;
 
 /**
  * Turns our search engine into a Web application, using Spring Boot. Web requests are received and
@@ -36,7 +37,7 @@ public class WebApplication {
     System.out.println("Welcome to the SearchEngine!");
 
     System.out.println("Reading database...");
-    List<Website> sites = FileHelper.parseFile(args);
+    Set<Website> sites = FileHelper.parseFile(args);
 
     System.out.println("Building the search engine...");
     searchengine = new SearchEngine(sites);
@@ -67,4 +68,5 @@ public class WebApplication {
 
     return resultList;
   }
+
 }
