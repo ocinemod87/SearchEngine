@@ -48,10 +48,14 @@ public class FileHelper {
     // set it to true after reading a line starting with *PAGE:, set it to false in the next line.
     boolean isNextLineTitle = false;
 
+    // Declare (and assign null to) the Scanner object outside the try block in order to access and
+    // close it in finally
+    Scanner sc = null;
+
     try {
       // load the file, will throw a FileNotFoundException if the
       // filename doesn't point to an existing file.
-      Scanner sc = new Scanner(new File(filename), "UTF-8");
+      sc = new Scanner(new File(filename), "UTF-8");
       // as long as we are not done with reading the file
       while (sc.hasNext()) {
         // get the next line from the file
@@ -91,8 +95,11 @@ public class FileHelper {
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
+    } finally {
+      if (sc != null) {
+        sc.close();
+      }
     }
-
     return sites;
   }
 

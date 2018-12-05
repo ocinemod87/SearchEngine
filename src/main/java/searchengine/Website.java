@@ -12,18 +12,18 @@ import java.util.HashMap;
 public class Website {
 
   /**
-   * the website's title
+   * The website's title
    */
   private String title;
 
   /**
-   * the website's url
+   * The website's url
    */
   private String url;
 
 
   /**
-   * a list of words storing the words on the website
+   * A list of words storing the words on the website
    */
   private List<String> words;
 

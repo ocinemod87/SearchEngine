@@ -1,6 +1,7 @@
 package searchengine;
 
 import java.util.Collections;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +41,7 @@ public abstract class InvertedIndex implements Index {
           // if the website already is in the value-set nothing happens.
           map.get(word).add(site);
         } else {
-          // if map doesn't contain the key word, create a new set of websites and add site to it.
+          // If not, create a new HashSet at the position of the key
           Set<Website> webTemp = new HashSet<>();
           webTemp.add(site);
           map.put(word, webTemp);
@@ -49,10 +50,9 @@ public abstract class InvertedIndex implements Index {
     }
   }
 
-
   /**
-   * Returns the set of websites which contains the query String, returns null if the map does not
-   * contain the key.
+   * Returns the set of websites which matches the query string, returns an empty
+   * {@code HashSet} if the query string does not match any sites in the map.
    * 
    * @param query The query
    * @return the Set of websites that contain the query word, or null if the query word is not among
@@ -67,4 +67,3 @@ public abstract class InvertedIndex implements Index {
     }
   }
 }
-
