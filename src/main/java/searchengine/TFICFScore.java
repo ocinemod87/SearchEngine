@@ -1,23 +1,24 @@
 package searchengine;
 
-public class TFIDFScore implements Score{
-  
- // Rank the site according to the whole query.
- public Double rank(Website site, Corpus corpus, String query) {
-     return rankQueryTFIDF(site, corpus, query);
- }
- 
-  private Double rankSingleTFIDF(Website site, Corpus corpus, String word) {
-    
-    // score single word/term according to the document frequency and inverse corpus frequency.
-    int wordSize = site.getWordSize();
-    double wordCount = (double) site.wordMap.get(word); // number of times word appear on website.
-    double siteCount = (double) corpus.appearInSitesMap.get(word); // number of times the word
-                                                                   // appears in a corpus website.
-    return (wordCount / wordSize) * Math.log(corpus.totalNumberOfSites / siteCount);
+public class TFICFScore implements Score {
+
+  @Override
+  public Double rank(Website site, Corpus corpus, String query) {
+    return rankQueryTFICF(site, corpus, query);
   }
 
-  private Double rankQueryTFIDF(Website site, Corpus corpus, String query) {
+  private Double rankSingleTFICF(Website site, Corpus corpus, String word) {
+    
+    // score single word/term according to the document frequency and inverse corpus frequency.
+    int wordSize = site.getWordSize(); // number of words on the site.
+    double wordCount = (double) site.wordMap.get(word); // number of times word appear on website.
+    double corpusCount = (double) corpus.index.get(word); // number of times word appear in corpus.
+    int corpusSize = corpus.wordSize; // number of words in the corpus. 
+        
+    return (wordCount / wordSize) * Math.log(corpusSize/corpusCount);
+  }
+
+  private Double rankQueryTFICF(Website site, Corpus corpus, String query) {
 
     double maxScoreSubQuery = 0;
 
@@ -30,7 +31,7 @@ public class TFIDFScore implements Score{
       double sum = 0;
       for (int k = 0; k < words.length; k++) {
         if (site.getWords().contains(words[k])) {
-          sum += rankSingleTFIDF(site, corpus, words[k]);
+          sum += rankSingleTFICF(site, corpus, words[k]);
         }
       }
 

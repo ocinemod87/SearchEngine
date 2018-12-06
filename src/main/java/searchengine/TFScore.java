@@ -1,36 +1,36 @@
 package searchengine;
 
-public class TFIDFScore implements Score{
+public class TFScore implements Score {
+
+  @Override
+  public Double rank(Website site, Corpus corpus, String query) {
+    return rankQueryTF(site, corpus, query);
+  }
   
- // Rank the site according to the whole query.
- public Double rank(Website site, Corpus corpus, String query) {
-     return rankQueryTFIDF(site, corpus, query);
- }
- 
-  private Double rankSingleTFIDF(Website site, Corpus corpus, String word) {
+private Double rankSingleTF(Website site, Corpus corpus, String word) {
     
     // score single word/term according to the document frequency and inverse corpus frequency.
     int wordSize = site.getWordSize();
     double wordCount = (double) site.wordMap.get(word); // number of times word appear on website.
-    double siteCount = (double) corpus.appearInSitesMap.get(word); // number of times the word
-                                                                   // appears in a corpus website.
-    return (wordCount / wordSize) * Math.log(corpus.totalNumberOfSites / siteCount);
+    return (wordCount / wordSize);
   }
 
-  private Double rankQueryTFIDF(Website site, Corpus corpus, String query) {
+  private Double rankQueryTF(Website site, Corpus corpus, String query) {
 
     double maxScoreSubQuery = 0;
 
-    // split the query into subqueries
+    // split the query into subqueries   
+    // FIX ME: this should be done exactly the same way as in the queryhandler!
     String[] subquerys = query.split("\\sOR\\s");
     for (int j = 0; j < subquerys.length; j++) {
       String[] words = subquerys[j].split("\\s");
-
+      
+      
       // sum the scores for the individual words in the subquery.
       double sum = 0;
       for (int k = 0; k < words.length; k++) {
         if (site.getWords().contains(words[k])) {
-          sum += rankSingleTFIDF(site, corpus, words[k]);
+          sum += rankSingleTF(site, corpus, words[k]);
         }
       }
 

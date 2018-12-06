@@ -31,7 +31,7 @@ public class SearchEngine {
     corpus = new Corpus(sites);
     corpus.build(); // corpus is kept in SearchEngine since this is where ranking is done.
     queryHandler = new QueryHandler(idx);  // index is passed to QueryHandler since this is where lookup is done.
-    score = new TFIDFScore(); // choose the scoring algorithm to use. 
+    score = new TFICFScore(); // choose the scoring algorithm to use. 
   }
 
   /**
@@ -47,13 +47,13 @@ public class SearchEngine {
     List<Website> results = queryHandler.getMatchingWebsites(query);
     
     // the websites are ordered according to rank. 
-    // The rank is calculated by the Score that belongs to the website.  
     return orderWebsites(results, query);
-    
   }
   
-  
-  private List<Website> orderWebsites(List<Website> resultList, String query) {
+  /**
+   * Rank a list of websites, according to the query (also using information about the whole database from corpus object.) 
+   */
+  private List<Website> orderWebsites(List<Website> list, String query) {
     
     // create a nested Comparator class
     class RankComparator implements Comparator<Website>{
@@ -61,11 +61,10 @@ public class SearchEngine {
         return score.rank(site, corpus, query).compareTo(score.rank(otherSite, corpus, query));
       }
     }
-    
+
     // sort the websites according to their rank.
-    resultList.sort(new RankComparator().reversed());  // why do we need to reverse? 
-    
-    return resultList;
+    list.sort(new RankComparator().reversed());  // why do we need to reverse?     
+    return list;
   }
   
 }

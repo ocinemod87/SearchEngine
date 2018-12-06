@@ -8,7 +8,7 @@ import java.util.TreeMap;
  * It is fairly similar to the Index classes. 
  */
 public class Corpus { 
-  Map<String, Integer> index; // package private
+  Map<String, Integer> index; // package private. Word is mapped to the number of times it appear in the corpus.
   int wordSize = 0; // package private
   Set<Website> allSites;  // all websites in the corpus.
   Map<String, Integer> appearInSitesMap; // package private
