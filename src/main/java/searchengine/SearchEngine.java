@@ -18,6 +18,7 @@ public class SearchEngine {
 
   private Corpus corpus;
   private QueryHandler queryHandler;
+  private Score score;
 
   /**
    * Creates a {@code SearchEngine} object from a list of websites.
@@ -30,6 +31,7 @@ public class SearchEngine {
     corpus = new Corpus(sites);
     corpus.build(); // corpus is kept in SearchEngine since this is where ranking is done.
     queryHandler = new QueryHandler(idx);  // index is passed to QueryHandler since this is where lookup is done.
+    score = new TFIDFScore(); // choose the scoring algorithm to use. 
   }
 
   /**
@@ -47,6 +49,7 @@ public class SearchEngine {
     // the websites are ordered according to rank. 
     // The rank is calculated by the Score that belongs to the website.  
     return orderWebsites(results, query);
+    
   }
   
   
@@ -55,7 +58,7 @@ public class SearchEngine {
     // create a nested Comparator class
     class RankComparator implements Comparator<Website>{
       public int compare(Website site, Website otherSite) {
-        return site.getRank(query, corpus).compareTo(otherSite.getRank(query, corpus));
+        return score.rank(site, corpus, query).compareTo(score.rank(otherSite, corpus, query));
       }
     }
     

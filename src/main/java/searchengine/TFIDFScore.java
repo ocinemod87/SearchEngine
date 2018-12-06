@@ -4,11 +4,11 @@ package searchengine;
 public class TFIDFScore implements Score{
   
  // Rank the site according to the whole query.
- public double rank(Website site, Corpus corpus, String query) {
+ public Double rank(Website site, Corpus corpus, String query) {
      return rankQueryTFIDF(site, corpus, query);
  }
-
-  private double rankSingleTFIDF(Website site, Corpus corpus, String word) {
+ 
+  private Double rankSingleTFIDF(Website site, Corpus corpus, String word) {
     
     // score single word/term according to the document frequency and inverse corpus frequency.
     int wordSize = site.getWordSize();
@@ -18,7 +18,7 @@ public class TFIDFScore implements Score{
     return (wordCount / wordSize) * Math.log(corpus.totalNumberOfSites / siteCount);
   }
 
-  private double rankQueryTFIDF(Website site, Corpus corpus, String query) {
+  private Double rankQueryTFIDF(Website site, Corpus corpus, String query) {
 
     double maxScoreSubQuery = 0;
 
