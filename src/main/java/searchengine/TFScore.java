@@ -56,12 +56,11 @@ public class TFScore implements Score {
       // sum the scores for the individual words in the subquery.
       double sum = 0;
       for (int k = 0; k < words.length; k++) {
-        if (site.getWords().contains(words[k])) {
-          sum += rankSingleTF(site, corpus, words[k]);
+        String word = words[k];
+        if (site.getWords().contains(word)) {
+          sum += rankSingleTF(site, corpus, word);
         }
       }
-
-
       assert sum >= 0 : "The rank of a site should always be non-negative."; // sanity check, that
                                                                              // rank is always
                                                                              // non-negative.
