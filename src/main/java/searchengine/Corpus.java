@@ -9,42 +9,43 @@ import java.util.TreeMap;
  * used by ranking methods to calculate the rank of individual websites in the corpus. The Corpus
  * class is fairly similar to the Index classes, and the two could perhaps be merged.
  */
-public class Corpus { 
-  
+public class Corpus {
+
   /**
    * A map which relates a word in the corpus to the number of times the word appear in the corpus.
    * The map is build when the corpus is instantiated. The map is made package private to allow
    * convenient access for external ranking methods.
    */
-  Map<String, Integer> index; // package private. Word is mapped to the number of times it appear in the corpus.
-  
+  Map<String, Integer> index; // package private. Word is mapped to the number of times it appear in
+                              // the corpus.
+
   /**
    * A map which relates a word in the corpus to the number of times the word appear in the corpus.
    * The map is build when the corpus is instantiated. The map is made package private to allow
    * convenient access for external ranking methods.
    */
   int wordSize = 0; // package private
-  
+
   /**
    * A set containing all the websites in the corpus. This set must be given to the Corpus when it
    * is instantiated.
    */
-  Set<Website> allSites;  // all websites in the corpus.
-  
+  Set<Website> allSites; // all websites in the corpus.
+
   /**
    * A map which relates a word to the number of sites/documents in which the word appears. The map
    * is build when the corpus is instantiated. The map is made package private to allow convenient
    * access for external ranking methods.
    */
   Map<String, Integer> appearInSitesMap; // package private
-  
-  
+
+
   /**
    * The total number of websites in the corpus.
    */
   int totalNumberOfSites;
-  
-  
+
+
   /**
    * A constructor that instantiates the corpus.
    * 
@@ -67,19 +68,18 @@ public class Corpus {
   // build the map of words
   public void build() {
     for (Website site : allSites) {
-      
+
       // get unique words from the site, and add 1 to the number of sites that the word appear in.
-      // NB: according to "Effective Java" by Joshua Bloch the forEach terminator shouldn't be used in cases like this (Item ...). Code should probably be refactored.
-      site.getWords().stream()
-          .distinct()
-          .forEach( w -> {
-            if (appearInSitesMap.containsKey(w)) {
-              appearInSitesMap.put(w, appearInSitesMap.get(w) + 1);
-            } else {
-              appearInSitesMap.put(w, 1);              
-            }
-          });   
-      
+      // NB: according to "Effective Java" by Joshua Bloch the forEach terminator shouldn't be used
+      // in cases like this (Item ...). Code should probably be refactored.
+      site.getWords().stream().distinct().forEach(w -> {
+        if (appearInSitesMap.containsKey(w)) {
+          appearInSitesMap.put(w, appearInSitesMap.get(w) + 1);
+        } else {
+          appearInSitesMap.put(w, 1);
+        }
+      });
+
       // take the number of times a word appear on the site,
       // and add it to the map that counts the number of times the word appears in the corpus.
       site.getWords().stream().distinct().forEach(w -> {
@@ -98,6 +98,7 @@ public class Corpus {
         wordSize += n;
       });
     }
-    assert wordSize == allSites.stream().map(Website::getWordSize).reduce(0, (total, count) -> total + count); // sanity check, that wordSize is calculated correctly.
+    assert wordSize == allSites.stream().map(Website::getWordSize).reduce(0,
+        (total, count) -> total + count); // sanity check, that wordSize is calculated correctly.
   }
 }
