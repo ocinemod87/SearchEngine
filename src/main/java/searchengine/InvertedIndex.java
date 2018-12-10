@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * The InvertedIndex data structure provides a way to build an index from a list of websites. It

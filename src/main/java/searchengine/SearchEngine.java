@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The search engine. Upon receiving a list of websites, it performs the necessary configuration
@@ -31,7 +30,7 @@ public class SearchEngine {
     corpus = new Corpus(sites);
     corpus.build(); // corpus is kept in SearchEngine since this is where ranking is done.
     queryHandler = new QueryHandler(idx);  // index is passed to QueryHandler since this is where lookup is done.
-    score = new TFICFScore(); // choose the scoring algorithm to use. 
+    score = new TFIDFScore(); // choose the scoring algorithm to use. 
   }
 
   /**
@@ -51,7 +50,13 @@ public class SearchEngine {
   }
   
   /**
-   * Rank a list of websites, according to the query (also using information about the whole database from corpus object.) 
+   * Rank a list of websites, according to the query, 
+   * also using information about the whole database from corpus object. 
+   *
+   * @param list List of websites to be ordered according to rank.
+   * @param query The search query.
+   * @return return the list of websites reordered according to rank.
+   * I.e the method modifies the input list.  
    */
   private List<Website> orderWebsites(List<Website> list, String query) {
     
