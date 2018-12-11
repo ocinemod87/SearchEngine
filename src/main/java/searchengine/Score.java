@@ -4,6 +4,11 @@ package searchengine;
  * An Interface which defines a Score type. This is a type that knows how to calculate a rank (or
  * score) for a website, given a Corpus (database of sites) and a search query.
  * 
+ * @author André Mortensen Kobæk
+ * @author Domenico Villani
+ * @author Flemming Westberg Sørensen
+ * @author Mikkel Buch Smedemand
+ * 
  */
 public interface Score {
 
