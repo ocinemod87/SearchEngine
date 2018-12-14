@@ -1,10 +1,12 @@
-In order to ensure proper quality of the individual code files and the system as a whole, we utilise different dynamic techniques.
+In order to ensure proper quality of the all the code and the system as a whole, we utilise different dynamic techniques.
 
-\section{Unit Testing and Assertions}
-Assertions, unit tests, 
+\section{Unit Testing}
+More significantly, we implement unit tests in order to ensure that the tested code units are bug free and that they handle the cases the way we expect. Obviously it is not possible to prove or guarantee that code is bug free, but we can at least remove them as much as possible. We have not implemented a specific testing scheme, in terms of white or black box testing, but rather an organic selection of the most appropriate tests for the individual units.
 
 \section{Code Review}
-Pair-programming, review of pull requests
+We practiced pair programming as much as possible due to its many benefits. \\
+Pair programming is a strong tool to ensure that the code produced is of high quality. The pair will discus the design and meta decisions on the fly, as well as being able to catch potential typos and blunders in the actual implementation. Additionally, pair programming prevents disruption of the group's work flow in the case a member is unavailable, as two members will be familiar with the same sections of the code. The drawback of pair programming is usually the lost man hours, but these are essentially either turned into insurance of work continuity or time saved bug fixing. \\
+Furthermore, we used the tools of \gitcode{Git} to improve quality assurance, specifically, we used the pull requests prior to feature branches being merged into the \code{develop} branch. When a feature is completely developed the author of the feature creates a pull request and the other members of the group review the implementation and make comments and suggestions. When every member agrees with the final implementation the feature is merged into the develop branch, ensuring that everyone is at least slightly familiar with as well as responsible for every part of the program.
 
 \section{Version Control and Git Work Flow}
-Keeping track of changes is essential. We decided upon a simplified version of Gitflow including a master and develop branch as well as individual feature branches. This allowed us to keep distinct releases separate from the latest work and ongoing experiments. For the scope of this project, we deemed release and hotfix branches unnecessary.
+Keeping track of changes is essential. We decided upon a simplified version of \gitcode{Gitflow} including a \gitcode{master} and \gitcode{develop} branch as well as individual feature branches. This allows us to keep distinct releases separate from the latest work and ongoing experiments. For the scope of this project, we deemed release and hotfix branches unnecessary.

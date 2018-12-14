@@ -1,22 +1,19 @@
 package searchengine;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+/**
+ * A {@code InvertedIndexHashMap} is an subclass of the {@code InvertedIndex} superclass, which is instantiated using a {@code HashMap}.
+ *
+ * @author André Mortensen Kobæk
+ * @author Domenico Villani
+ * @author Flemming Westberg
+ * @author Mikkel Buch Smedemand
+ */
 
 public class InvertedIndexHashMap extends InvertedIndex {
 
+  /* Creates a {@code InvertedIndexHashMap} using a {@code HashMap} */
   public InvertedIndexHashMap() {
     this.map = new HashMap<>();
-  }
-
-  @Override
-  public String toString() {
-    Set<Website> allSites = new HashSet<>();
-    for (Set<Website> set : map.values()) {
-      allSites.addAll(set);
-    }
-
-    return "InvertedIndexHashMap{" + "sites=" + allSites.toString() + '}';
   }
 }

@@ -1,0 +1,168 @@
+\section{Fuzzy Searching}
+This extension makes our search engine able to find relevant pages even if the user makes a spelling error in the search field. If a word in the search query doesn't exist the \code{Fuzzy.expand} method will look for similar words in the corpus/database. 
+Our fuzzy search feature knows nothing about synonyms or words not in the database, neither has it any knowledge of the relation between words, or of which sites are similar, for instance as determined by our k-means clustering algorithm.  
+
+\subsection{q-gram Indices}
+Just as the inverted index is a map from words to sites containing that word, a q-gram index is a map from a specific gram to all the words containing it. 
+
+What exactly is meant by "all the words"? All the words in the english dictionary or just all the words in the loaded database? To keep things simple we chose to just consider all words in the loaded database, but in a more polished version of a fuzzy search algorithm one should use a dictionary of all the words in a language. 
+
+According to the lecture notes in \cite{lectureNotes} it's a good idea to pad the words with a special character such as \(\$\). A reason for doing this is that it gives more weight to the starting letter. Words with the same beginning letter will then always have a q-gram in-common with the misspelled word. 
+The number of q-grams for an unpadded word \(x\), is \(|x| - q + 1\), and for a padded word as described above, the number of q-grams is \(|x| + q - 1\).  
+
+Before building a 2-gram index for our search engine, lets think about the size of it.
+If an alphabet has \(n\) letters there are \(n^2\) possible 2-grams, \(n^3\) possible 3-grams and \(n^q\) possible q-grams. Hence the number of grams is fairly small. But the number of unique words in the database might be fairly large, and each word has \(|word| + 1\) 2-grams. Hence the words that a 2-gram maps to, needs to be stored efficiently. 
+We chose to make an \code{ArrayList<String>} with all the unique words and sort it alphabetically, then each word can be represented as it's corresponding index in this \code{ArrayList<String>}.
+
+A particular 2-gram is then mapped to a \code{int[]} with length equal to the number of unique words. This \code{int[]} only consists of \(0\)'s and \(1\)'s, zero if a word doesn't contain the 2-gram and a one if the word contain the 2-gram.
+This vector is fairly long and mainly consists of zeroes, so it might be somewhat inefficient with regards to space/memory usage. 
+But the upside with this approach is that it gets easier later in \code{Fuzzy.expand} when we want to find set set of related/approximate words which have 2-grams in common with a wrongly spelled word \(x\), and also to keep track of how many similar 2-grams a particular word has in common with \(x\). Only the words which have sufficiently many 2-grams in common with \(x\) is kept for further inspection. 
+
+In the \code{Fuzzy.expand} method we decide how big a Levenshtein distance \(\delta\) we will accept when searching for similar words, and words with few common 2-grams can be rejected immediately by using the bound,
+
+\[ \text{commonGrams} \geq \max{(|x|, |y|) - 1 - (\delta -1 ) \cdot q } \]   
+
+those words will have a Levenshtein distance bigger than the allowed \(\delta\) \cite{lectureNotes}.  
+For all words which have enough common 2-grams to pass this bound, we will have to explicitly calculate the Levenshtein distance, as shown in listing \ref{lst:levenshtein}, to check whether the words has an Levenshtein distance smaller or equal to the chosen limit. 
+
+
+\begin{lstlisting}[language={Java}, caption={Implementation of Fuzzy.expand method.}, label={lst:expand}]
+public Set<String> expand(String unknownWord) {
+
+	// Set for storing the fuzzy strings
+	Set<String> fuzzyStrings = new HashSet<>();
+	
+	// maximum allowed edit distance.
+	int delta;
+	
+	// delta is assigned based on the length of the word
+	switch (unknownWord.length()) {
+		case 3:
+			delta = 1;
+			break;
+		case 2:
+			delta = 1;
+			break;
+		case 1:
+			fuzzyStrings.add(unknownWord);
+			return fuzzyStrings;
+		default:
+			delta = 2;
+			break;
+	}
+	
+	// only looking at 2-grams for now
+	int gramSize = 2;
+	
+	// number of unique words in the corpus
+	int ncols = corpus.getWordCountUnique();
+	
+	Set<String> approximateStrings = new HashSet<>();
+	
+	// the summedRowVector keeps track of how many grams each 
+	// word in the corpus has in common with the unknownWord.
+	int[] summedRowVector = new int[ncols];
+	
+	// go through all bigrams for unknownWord
+	for (String bigram : calculate2Gram(unknownWord)) {
+	
+		// get "boolean" vector of all the words containing the bigram.
+		int[] rowVector = corpus.getBiGramMap().get(bigram);
+		for (int ncol = 0; ncol < ncols; ncol++) {
+			// add vector for bigram to the summed vector. 
+			summedRowVector[ncol] += rowVector[ncol];
+		}
+	}
+	
+	// add approximate words
+	for (int i = 0; i < summedRowVector.length; i++) {
+		// words that have too few grams in common with unknownWord, are ignored.
+		int commonGramsBound =
+		Math.max(unknownWord.length(), corpus.getWordsInCorpus().get(i).length()) - 1
+		- (delta - 1) * gramSize;
+		if (summedRowVector[i] >= commonGramsBound) {
+			// words that have sufficient grams, might be within allowed edit distance. 
+			approximateStrings.add(corpus.getWordsInCorpus().get(i));
+		}
+	}
+	
+	// only keep the approximate strings with edit distance less or equal to allowed.
+	for (String approxString : approximateStrings) {
+	
+		// check if editDistance is smaller than delta
+		int editDistance = editDistance(unknownWord, approxString);
+		if (editDistance <= delta) {
+			fuzzyStrings.add(approxString);
+		} else {
+			// do nothing
+		}
+	}
+	System.out.println("Cannot find word: " + unknownWord + " Instead I'll try to search for:");
+	System.out.println(fuzzyStrings.toString());
+	return fuzzyStrings;
+}
+\end{lstlisting}
+
+
+\subsection{Levenshtein Distance}
+The Levenshtein distance is a measure of how similar two words are to each other, it measures the number of edit operations needed to get from one word to the other. 
+
+Operations allowed in the Levenshtein distance are: \emph{delete} characters, \emph{insert} characters or \emph{change} characters. Note that, with the Levenshtein distance, transpositions where two characters are switched, is not counted as a single edit operation, but as two since one needs to make 2 change edits, or a combination of delete and insert. The formal definition of the Levenshtein distance is,
+
+\begin{equation}  
+lev_{(a,b)}(i,j) = 
+	\begin{cases} 
+		\max{(i,j)}, & \text{if}\ \min{(i,j) = 0} \\
+		\min{} \begin{cases}
+					lev_{(a,b)}(i-1,j) + 1 \\
+					lev_{(a,b)}(i,j-1) + 1 \\
+					lev_{(a,b)}(i-1,j-1) + \mathbbm{1}_{a_{i} \neq b_{j}} \\
+				\end{cases} , & \text{otherwise}
+	\end{cases}
+\label{eq:levenshtein-def}
+\end{equation}
+
+where \(lev_{(a,b)}(i,j)\) is the Levenshtein distance between the first \(i\) characters of \(a\), and the first \(j\) characters of \(b\). \(\mathbbm{1}_{a_{i} \neq b_{j}}\) is the indicator function which is equal to 1 when \(a_{i} \neq b_{j}\) and 0 otherwise.
+\eqref{eq:levenshtein-def} is a recursive definition but a recursive algorithm calculating the distance is not efficient because it calculates the distance between the beginning of the words many times \cite{wikiLeven}. So instead we use the algorithm described in \cite{WF1974}. Our implementation to calculate the Levenshtein distance is shown in listing \ref{lst:levenshtein}.
+ 
+\begin{lstlisting}[language={Java}, caption={Our implementation of an algorithm for calculating the Levenshtein distance.}, label={lst:levenshtein}]
+	private int editDistance(String x, String y) {
+	
+		// cost "function" for allowed edits. All edits have the same cost.
+		int deleteCost = 1;
+		int insertCost = 1;
+		int changeCost = 1;
+		
+		// instantiate matrix D
+		int[][] D = new int[x.length() + 1][y.length() + 1];
+		
+		// loop over string x.length. Populate first column.
+		for (int i = 1; i < x.length() + 1; i++) {
+			D[i][0] = D[i - 1][0] + deleteCost;
+		}
+		
+		// loop over string y.length. Populate first row.
+		for (int j = 1; j < y.length() + 1; j++) {
+			D[0][j] = D[0][j - 1] + insertCost;
+		}
+		
+		// calculate remaining matrix elements.
+		for (int i = 1; i < x.length() + 1; i++) {
+			for (int j = 1; j < y.length() + 1; j++) {
+		
+				// calculate indicator function
+				int equalIndicator = changeCost;
+				if (x.substring(i - 1, i).equals(y.substring(j - 1, j))) {
+					equalIndicator = 0;
+				}
+				
+				// calculate m1, m2 and m3 and put the minimum value into the matrix element Dij.
+				int m1 = D[i - 1][j - 1] + equalIndicator;
+				int m2 = D[i - 1][j] + deleteCost;
+				int m3 = D[i][j - 1] + insertCost;
+				D[i][j] = Math.min(m1, Math.min(m2, m3));
+			}
+		}
+		return D[x.length()][y.length()];
+	}
+\end{lstlisting}

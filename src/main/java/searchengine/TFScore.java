@@ -1,64 +1,89 @@
 package searchengine;
 
+import java.util.List;
+
+/**
+ * The {@code TFScore} is an implementation of the {@code Score interface}. It calculates a rank
+ * for a {@code Website}, given a {@code Corpus} and either a {@code structuredQuery} or a single word using the TFICF algorithm.
+ *
+ * @author André Mortensen Kobæk
+ * @author Domenico Villani
+ * @author Flemming Westberg
+ * @author Mikkel Buch Smedemand
+ */
+
 public class TFScore implements Score {
 
-  // Rank the site according to the whole query, and the corpus.
+  /**
+   * Calculates the rank of the {@code Website}, given a {@code Corpus}, and a {@code structuredQuery} using the TF ranking algorithm.
+   *
+   * @param site {@code Website} that is to be ranked.
+   * @param corpus {@code Corpus} is a collection of all {@code Websites} in the {@code SearchEngine}. Which is not used for anything.
+   * @param structuredQuery A {@code List<List<String>>} collection of query words organised in {@code subQueries}.
+   * @return reference type {@code Double}. {@code Double} is chosen over the primitive typ because the
+   * {@code .compareTo()} method of {@code Double} is used to sort the {@code Websites} according to
+   * rank.
+   */
   @Override
-  public Double rank(Website site, Corpus corpus, String query) {
-    return rankQueryTF(site, corpus, query);
+  public Double rank(Website site, Corpus corpus, List<List<String>> structuredQuery) {
+    return rankQueryTF(site, structuredQuery);
+  }
+
+  /**
+   * Calculates the rank of a given {@code Website}, given a {@code Corpus}, and a single word using the TF ranking algorithm.
+   *
+   * @param site {@code Website} that is to be ranked.
+   * @param corpus {@code Corpus} is a collection of all {@code Websites} in the {@code SearchEngine}. Which is not used for anything.
+   * @param word A query word.
+   * @return reference type {@code Double}. {@code Double} is chosen over the primitive typ because the
+   * {@code .compareTo()} method of {@code Double} is used to sort the {@code Websites} according to
+   * rank.
+   */
+  @Override
+  public Double rankSingle(Website site, Corpus corpus,  String word) {
+    return rankSingleTF(site, word);
   }
 
 
   /**
-   * Rank a single website according to a single word. Ranking algorithm is TF
-   * 
-   * @param site a single website that will be ranked.
-   * @param corpus of all websites that the search engine knows about. NB: this is actually not used
-   *        in this simple algorithm. But to comply with the Score interface the corpus parameter
-   *        still needs to be there (ugly, we know).
-   * @param a single word from the search query.
-   * @return the rank of the site. Rank will always be non-negative.
+   * Rank a single {@code Website} given the {@code Corpus} and a single query word. The ranking algorithm applied is TFICF (i.e Inverse
+   * Corpus Term Frequency).
+   *
+   * @param site The {@code Website} to be ranked.
+   * @param word The query word.
+   * @return The ranking of the {@code Website}.
    */
-  private Double rankSingleTF(Website site, Corpus corpus, String word) {
+  private Double rankSingleTF(Website site, String word) {
 
     // score single word/term according to the document frequency and inverse corpus frequency.
-    int wordSize = site.getWordSize();
+    int wordSize = site.getWordCount();
 
     // number of times word appear on website, i.e the term site count.
-    double wordCount = (double) site.wordMap.get(word);
+    double wordCount = (double) site.getWordsToOccurences().get(word);
 
     // the site term frequency.
     return (wordCount / wordSize);
   }
 
-
   /**
-   * Rank the site according to the whole query. I.e calculate and set the rank field of a website.
-   * The ranking algorithm is TF.
-   * 
-   * @param site the website that are to be ranked.
-   * @param corpus the corpus of all websites.
-   * @param query the search query string.
-   * 
-   * @return Double value
+   * Rank a single {@code Website} given the {@code Corpus} and a {@code structuredQuery}. The ranking algorithm applied is TFICF (i.e Inverse
+   * Corpus Term Frequency).
+   *
+   * @param site The {@code Website} to be ranked.
+   * @param structuredQuery A {@code List<List<String>>} collection of query words organised in {@code subQueries}.
+   * @return The ranking of the {@code Website}.
    */
-  private Double rankQueryTF(Website site, Corpus corpus, String query) {
+
+  private Double rankQueryTF(Website site, List<List<String>> structuredQuery) {
 
     double maxScoreSubQuery = 0;
 
-    // split the query into subqueries
-    // FIX ME: this should be done exactly the same way as in the queryhandler!
-    String[] subquerys = query.split("\\sOR\\s");
-    for (int j = 0; j < subquerys.length; j++) {
-      String[] words = subquerys[j].split("\\s");
-
-
+    for (List<String> subquery : structuredQuery) {
       // sum the scores for the individual words in the subquery.
       double sum = 0;
-      for (int k = 0; k < words.length; k++) {
-        String word = words[k];
+      for (String word : subquery) {
         if (site.getWords().contains(word)) {
-          sum += rankSingleTF(site, corpus, word);
+          sum += rankSingleTF(site, word);
         }
       }
       assert sum >= 0 : "The rank of a site should always be non-negative."; // sanity check, that

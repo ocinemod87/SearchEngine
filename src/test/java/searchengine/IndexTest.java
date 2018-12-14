@@ -10,9 +10,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndexTest {
-  Index simpleIndex = null;
-  InvertedIndex treeIndex = null;
-  InvertedIndex hashIndex = null;
+  private Index simpleIndex = null;
+  private InvertedIndex treeIndex = null;
+  private InvertedIndex hashIndex = null;
 
   @BeforeEach
   void setUp() {
@@ -114,15 +114,6 @@ class IndexTest {
   void addEntryTreeIndex() {
     addEntryToMapWithoutBuild(treeIndex);
   }
-
-
-  // @Test
-  // void buildSimpleIndex() {
-  // assertEquals("SimpleIndex{sites=[Website{title='example1', url='example1.com', words=[word1,
-  // word2, word1]}, Website{title='example2', url='example2.com', words=[word2, word3]}]}",
-  // simpleIndex.toString());
-  // }
-
 
   /**
    * 

@@ -3,6 +3,11 @@ package searchengine;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A naive implementation of the {@code Index interface}
+ *
+ * @author {@code unknownAuthorExecption}
+ */
 public class SimpleIndex implements Index {
 
   /**

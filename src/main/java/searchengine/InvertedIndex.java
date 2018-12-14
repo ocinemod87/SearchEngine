@@ -1,24 +1,28 @@
 package searchengine;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+
 
 /**
  * The InvertedIndex data structure provides a way to build an index from a list of websites. It
- * allows to lookup the websites that contain a query word. The InvertedIndex maps query words to
- * websites allowing for a more effective lookup
+ * allows the option to lookup the websites that contain a query word. The index is implemented using a {@code Map}.
  */
 public abstract class InvertedIndex implements Index {
 
+  /**
+   * The data structure of the index.
+   */
   protected Map<String, Set<Website>> map;
 
   /**
-   * Takes a set of websites and creates a map. The keys are the words contained in these websites,
-   * the value is a set of all the websites containing that key word.
-   * 
-   * @param sites The set of websites that should be indexed
+   * Builds an inverted index, mapping a word to the {@code Websites} containing it, given a {@code Set<Websites>}
+   *
+   * @param sites A set of websites to be indexed.
    */
   @Override
   public void build(Set<Website> sites) {
@@ -48,14 +52,12 @@ public abstract class InvertedIndex implements Index {
       }
     }
   }
-
   /**
-   * Returns the set of websites which matches the query string, returns an empty
-   * {@code HashSet} if the query string does not match any sites in the map.
+   * Returns the set of websites which match the {@code query}, returns an empty
+   * {@code Set} if the {@code query} is not contained in the {@code Map}.
    * 
-   * @param query The query
-   * @return the Set of websites that contain the query word, or null if the query word is not among
-   *         the map keys.
+   * @param query The query to be looked up.
+   * @return the {@code Set<Website>} that contain the query word.
    */
   @Override
   public Set<Website> lookup(String query) {

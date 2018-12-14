@@ -1,11 +1,30 @@
 \section{Refined Queries}
 
-\subsection{Basic Input Validation}
-Initially, we added simple input validation to [QueryHandler] to only accept queries comprised of characters in the English alphabet, digits, dashes and underscores. This was done using the following regular expression: %[\\b([-\\w]+)\\b]
-Additionally, query strings are transformed to lowercase using [.toLowerCase()] before doing a lookup.
+During the implementation of the inverted index, we add simple input validation to \code{QueryHandler} to only accept queries comprised of characters in the English alphabet, digits, dashes and underscores. This is done using the following regular expression: \code{\\\\b([-\\\\w]+)\\\\b}. Additionally, query strings are transformed to lower case before doing a lookup.
 
-\subsection{Several Keywords}
-some text
+For the refined queries, we build upon this functionality.
 
-\subsection{Searches With "OR"}
-some more text
+\subsection{Multiple Words}
+First off, we add logic to handle multiple words in a search query. We need to return the websites containing all the words in the query string. Since we utilise \code{Pattern} and \code{Matcher}, the procedure is quite simple: If there is more than one match, the results from the first lookup is stored in a set and the results from the following lookups are retained from the same set. After the final lookup, a list is returned (since this is what \code{SearchEngine} and \code{WebApplication} expects).
+
+Tests for the implementation are located in \code{QueryHandlerTest.java}.
+
+\subsection{Merging via "OR"}
+Second, we implement functionality to allow merging word sequences via "OR". The search query is split around the matches of the regular expression \code{\\\\bOR\\\\b}. The resulting sequences are stored in an array of strings, and for each of these strings a set of matching websites is found. The union of these sets form the response to the query. The nature of sets prevent duplicate elements. Finally, the results are added to a list which is returned.
+
+Tests for the implementation are located in \code{QueryHandlerTest.java}.
+
+\subsection{URL Filter}
+Additionally, we added an URL filter to the \code{QueryHandler}. The intention of introducing a URL filter is to let the user specify which websites he/she wants to receive results from. This is done by using the syntax \code{site:https://website.url/} when writing a query. This functionality is implemented in the \code{getMathcingWebsites} using, primarily, a regular expression: \code{^\\\\s*site:(\\\\S+)}. The regular expression is applied to the query string in the manner displayed in Listing \ref{lst:urlsearchregex}. \\
+\begin{lstlisting}[language=Java, caption=Applying the regular expression, label=lst:urlsearchregex]
+String siteUrl = null;
+urlMatcher = urlPattern.matcher(query);
+if (urlMatcher.find()){
+  siteUrl = urlMatcher.group(1).toLowerCase();
+  query = query.replace(urlMatcher.group(),"");
+}
+\end{lstlisting}
+The \code{.getMatchingWebsites()} method then carries out its tasks as it has done prior to this implementation. The only other change to the method is the \code{if (stringUrl!=null)} right before returning the list of found websites. When the URL search is activated the captured URL string is then applied to verify the matching websites found by the method. Only the verified websites are returned. \\ \\
+The choice to apply a regular expression, as opposed to solving the task using string operations, was based on the fact that is was largely in line with the existing implementation. Additionally, the solutions provides a very slick implementation that performs its task in just a few lines of code.
+\\ \\
+This feature sadly suffers in applicability due to the contents of the current database, as the database consists exclusively of wikipedia articles. This makes the feature fairly excessive to use, but it can indeed be utilised by the determined user. 

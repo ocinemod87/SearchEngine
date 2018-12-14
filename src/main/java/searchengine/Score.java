@@ -1,27 +1,39 @@
 package searchengine;
 
+import java.util.List;
+
 /**
- * An Interface which defines a Score type. This is a type that knows how to calculate a rank (or
- * score) for a website, given a Corpus (database of sites) and a search query.
- * 
+ * An {@code Interface} which defines a {@code Score} type. The {@code Score} type knows how to calculate a rank (or
+ * score) for a {@code Website}, given a {@code Corpus} and a {@code structuredQuery}.
+ *
  * @author André Mortensen Kobæk
  * @author Domenico Villani
- * @author Flemming Westberg Sørensen
+ * @author Flemming Westberg
  * @author Mikkel Buch Smedemand
- * 
  */
 public interface Score {
 
   /**
-   * Calculate the rank of the website, given a corpus/databse of websites, and a search query.
+   * Calculates the rank of the {@code Website}, given a {@code Corpus}, and a {@code structuredQuery}.
    * 
-   * @param site Website that needs to be ranked.
-   * @param corpus Corpus is the collection of websites that the searchEngine knows about.
-   * @param query String of search words possibly separated by white space and/or OR.
-   * @return reference type Double. The reference type is Double instead of the primitive type
-   *         double because the compareTo method of Double is used to sort the websites according to
-   *         rank.
+   * @param site {@code Website} that is to be ranked.
+   * @param corpus {@code Corpus} is a collection of all {@code Websites} in the {@code SearchEngine}.
+   * @param structuredQuery A {@code List<List<String>>} collection of query words organised in {@code subQueries}.
+   * @return reference type {@code Double}. {@code Double} is chosen over the primitive typ because the
+   * {@code .compareTo()} method of {@code Double} is used to sort the {@code Websites} according to
+   * rank.
    */
-  Double rank(Website site, Corpus corpus, String query);
+  Double rank(Website site, Corpus corpus, List<List<String>> structuredQuery);
 
+  /**
+   * Calculates the rank of a given {@code Website}, given a {@code Corpus}, and a single word.
+   *
+   * @param site {@code Website} that is to be ranked.
+   * @param corpus {@code Corpus} is a collection of all {@code Websites} in the {@code SearchEngine}.
+   * @param word A query word.
+   * @return reference type {@code Double}. {@code Double} is chosen over the primitive typ because the
+   * {@code .compareTo()} method of {@code Double} is used to sort the {@code Websites} according to
+   * rank.
+   */
+  Double rankSingle(Website site, Corpus corpus, String word);
 }

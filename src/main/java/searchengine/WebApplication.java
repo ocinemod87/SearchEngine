@@ -56,17 +56,30 @@ public class WebApplication {
    * @param query the query string
    * @return the list of websites that matches the query
    */
+  // @CrossOrigin(origins = "*")
+  // @RequestMapping("/search")
+  // public List<Website> search(@RequestParam(value = "query", defaultValue = "") String query) {
+
+  //   System.out.println("Handling request for query word \"" + query + "\"");
+
+  //   List<Website> resultList = searchengine.search(query);
+
+  //   System.out.println("Found " + resultList.size() + " websites.");
+
+  //   return resultList;
+  // }
+
   @CrossOrigin(origins = "*")
   @RequestMapping("/search")
   public List<Website> search(@RequestParam(value = "query", defaultValue = "") String query) {
 
     System.out.println("Handling request for query word \"" + query + "\"");
 
-    List<Website> resultList = searchengine.search(query);
+    List<Website> searchResult = searchengine.search(query);
 
-    System.out.println("Found " + resultList.size() + " websites.");
+    System.out.println("Found " + searchResult.size() + " websites.");
 
-    return resultList;
+    return searchResult;
   }
-
+  
 }
