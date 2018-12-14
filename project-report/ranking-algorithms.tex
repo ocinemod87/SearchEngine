@@ -61,7 +61,7 @@ But what kind of word is `rank` or `score`, a verb or a noun? Actually it can be
 \end{figure}
 
 In the first implementation we tried, we wrote a utility class named \code{Score} which had static rank methods for ranking websites.   
-A (relevant part of the) UML class diagram for this design is shown in figure \ref{fig:uml:ScoreAsClass}, and snippets of relevant code lines from the implementation is shown in listing \ref{lst:ScoreUtilityClass} and \ref{lst:ScoreUtilityClass-2}. 
+A (relevant part of the) UML class diagram for this design is shown in figure \ref{fig:uml:ScoreAsUtility}, and snippets of relevant code lines from the implementation is shown in listing \ref{lst:ScoreUtilityClass} and \ref{lst:ScoreUtilityClass-2}. 
 A drawback of this method is that it doesn't have a \code{Score} interface as specified in the mandatory requirements for the assignment.
 Another drawback of this implementation is that the ranking methods works by having a sideeffect, rather than returning a value. The ranking methods sets a score field in the website. This field is then used when sorting the sites. A better way would be to make ranking methods with no sideeffect and instead return the website score directly, and use this for sorting. This is fixed in the second implementation we did.      
 
