@@ -9,7 +9,6 @@ import java.util.List;
  * reassigned.
  *
  * @author Domenico Villani
- * @author Mikkel Buch Smedemand
  */
 public class Centroid {
 
